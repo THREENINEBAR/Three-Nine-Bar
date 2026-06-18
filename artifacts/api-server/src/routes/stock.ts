@@ -19,33 +19,22 @@ router.get("/stock/opname", async (req, res) => {
     let stockFinal: number;
 
     if (date) {
-      // Filter movements to the selected date
       const dayMovements = ingMovements.filter(m => {
         const d = m.createdAt.toISOString().split("T")[0];
         return d === date;
       });
-      const afterDayMovements = ingMovements.filter(m => {
-        const d = m.createdAt.toISOString().split("T")[0];
-        return d > date;
-      });
 
+      stockInitial = dayMovements.filter(m => m.movementType === "initial").reduce((s, m) => s + m.qty, 0);
       stockIn = dayMovements.filter(m => m.movementType === "in").reduce((s, m) => s + m.qty, 0);
       stockOut = dayMovements.filter(m => m.movementType === "out").reduce((s, m) => s + m.qty, 0);
       stockWasting = dayMovements.filter(m => m.movementType === "wasting").reduce((s, m) => s + m.qty, 0);
-
-      // Stock at END of day = currentStock + (everything that went out AFTER this date) - (everything that came in AFTER this date)
-      const afterIn = afterDayMovements.filter(m => m.movementType === "in").reduce((s, m) => s + m.qty, 0);
-      const afterOut = afterDayMovements.filter(m => m.movementType === "out").reduce((s, m) => s + m.qty, 0);
-      const afterWasting = afterDayMovements.filter(m => m.movementType === "wasting").reduce((s, m) => s + m.qty, 0);
-      stockFinal = ing.currentStock + afterOut + afterWasting - afterIn;
-      stockInitial = stockFinal - stockIn + stockOut + stockWasting;
+      stockFinal = Math.max(0, stockInitial + stockIn - stockOut - stockWasting);
     } else {
-      // All time
+      stockInitial = ing.stockInitial;
       stockIn = ingMovements.filter(m => m.movementType === "in").reduce((s, m) => s + m.qty, 0);
       stockOut = ingMovements.filter(m => m.movementType === "out").reduce((s, m) => s + m.qty, 0);
       stockWasting = ingMovements.filter(m => m.movementType === "wasting").reduce((s, m) => s + m.qty, 0);
       stockFinal = ing.currentStock;
-      stockInitial = ing.stockInitial;
     }
 
     return {
@@ -57,7 +46,7 @@ router.get("/stock/opname", async (req, res) => {
       stockIn,
       stockOut,
       stockWasting,
-      stockFinal: Math.max(0, stockFinal),
+      stockFinal,
       stockMinimum: ing.stockMinimum,
       isLowStock: ing.currentStock <= ing.stockMinimum,
       currentStock: ing.currentStock,
@@ -90,20 +79,25 @@ router.get("/stock/movements", async (req, res) => {
   res.json(formatted);
 });
 
+// POST /stock/add — Tambah Barang Masuk (IN)
 router.post("/stock/add", async (req, res) => {
-  const { ingredientId, qty, notes } = req.body;
+  const { ingredientId, qty, notes, date } = req.body;
   if (!ingredientId || !qty) {
     res.status(400).json({ error: "ingredientId and qty required" });
     return;
   }
   const addQty = Number(qty);
   await db.update(ingredientsTable).set({ currentStock: sql`current_stock + ${addQty}` }).where(eq(ingredientsTable.id, ingredientId));
+
+  const createdAt = date ? new Date(date + "T12:00:00") : new Date();
+
   const result = await db.insert(stockMovementsTable).values({
     ingredientId,
     movementType: "in",
     qty: addQty,
     referenceType: "manual",
-    notes: notes || "Manual stock addition",
+    notes: notes || "Barang masuk",
+    createdAt,
   }).returning();
   const m = result[0];
   const ing = (await db.select().from(ingredientsTable).where(eq(ingredientsTable.id, ingredientId)))[0];
@@ -112,6 +106,34 @@ router.post("/stock/add", async (req, res) => {
     movementType: m.movementType, qty: m.qty, unit: ing?.unit || "",
     referenceType: m.referenceType, referenceId: m.referenceId ?? null,
     notes: m.notes ?? null, createdAt: m.createdAt.toISOString(),
+  });
+});
+
+// POST /stock/initial — Input Stock Awal
+router.post("/stock/initial", async (req, res) => {
+  const { ingredientId, qty, notes, date } = req.body;
+  if (!ingredientId || !qty) {
+    res.status(400).json({ error: "ingredientId and qty required" });
+    return;
+  }
+  const addQty = Number(qty);
+  const createdAt = date ? new Date(date + "T08:00:00") : new Date();
+
+  const result = await db.insert(stockMovementsTable).values({
+    ingredientId,
+    movementType: "initial",
+    qty: addQty,
+    referenceType: "manual",
+    notes: notes || "Stock Awal",
+    createdAt,
+  }).returning();
+  const m = result[0];
+  const ing = (await db.select().from(ingredientsTable).where(eq(ingredientsTable.id, ingredientId)))[0];
+  res.status(201).json({
+    id: m.id, ingredientId: m.ingredientId, ingredientName: ing?.name || "",
+    movementType: m.movementType, qty: m.qty, unit: ing?.unit || "",
+    referenceType: m.referenceType, notes: m.notes ?? null,
+    createdAt: m.createdAt.toISOString(),
   });
 });
 

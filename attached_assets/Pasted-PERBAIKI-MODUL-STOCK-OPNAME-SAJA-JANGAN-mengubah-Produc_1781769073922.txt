@@ -1,0 +1,197 @@
+PERBAIKI MODUL STOCK OPNAME SAJA.
+
+JANGAN mengubah Product, Recipe, Product Sale, Dashboard, Authentication, Database Schema maupun fitur lain yang sudah berjalan.
+
+Gunakan seluruh sistem Recipe dan Product Sale yang sudah ada.
+
+====================================================
+
+UBAH TAMPILAN STOCK OPNAME MENJADI SEPERTI FORM INVENTORY BAR.
+
+HAPUS bagian "Stock Saat Ini" yang sekarang berada di atas halaman.
+
+Langsung tampilkan tabel Stock Opname.
+
+====================================================
+
+TABEL STOCK OPNAME
+
+Kolom:
+
+* Nama Bahan
+* Stock Awal
+* IN
+* OUT
+* Wasting
+* Stock Akhir
+
+====================================================
+
+YANG BOLEH DIINPUT STAFF HANYA:
+
+1. Stock Awal
+2. IN
+
+OUT tidak boleh bisa diedit.
+
+Stock Akhir tidak boleh bisa diedit.
+
+====================================================
+
+STOCK AWAL
+
+Pada kolom Stock Awal tambahkan tombol atau icon (+).
+
+Saat tombol ditekan muncul modal:
+
+Input Stock Awal
+
+Field:
+
+* Tanggal
+* Qty Stock Awal
+* Keterangan
+
+Contoh:
+
+Tanggal : 18/06/2026
+
+Qty : 2000
+
+Keterangan :
+Opening Shift
+
+Saat disimpan:
+
+* simpan ke database
+* tampilkan nilai pada kolom Stock Awal
+
+====================================================
+
+IN
+
+Pada kolom IN tambahkan tombol (+).
+
+Saat ditekan muncul modal:
+
+Tambah Barang Masuk
+
+Field:
+
+* Tanggal
+* Qty Masuk
+* Keterangan
+
+Contoh:
+
+Qty = 1000
+
+Keterangan =
+Ambil dari Gudang
+
+Saat disimpan:
+
+* simpan ke stock_movements
+* type = IN
+* tampilkan total IN pada tabel
+
+====================================================
+
+OUT
+
+OUT TIDAK BOLEH DIINPUT MANUAL.
+
+OUT HARUS TETAP dihitung otomatis berdasarkan:
+
+Product Sale
++
+Recipe
+
+Contoh:
+
+Mojito terjual 10
+
+Recipe:
+
+Rum = 50 ml
+
+Maka
+
+OUT Rum = 500 ml
+
+Otomatis.
+
+====================================================
+
+WASTING
+
+Tetap menggunakan modul Wasting yang sudah ada.
+
+====================================================
+
+STOCK AKHIR
+
+Hitung otomatis:
+
+Stock Akhir =
+Stock Awal
++
+IN
+--
+
+## OUT
+
+Wasting
+
+====================================================
+
+FILTER
+
+Tambahkan filter:
+
+* Tanggal
+
+Saat tanggal berubah,
+tabel otomatis menampilkan data pada tanggal tersebut.
+
+====================================================
+
+CONTOH DATA
+
+JANGAN membuat data inventory lengkap.
+
+Cukup gunakan 5 contoh data berikut sebagai seed data apabila database masih kosong:
+
+1. FULL ARABICA
+2. FULL ROBUSTA
+3. FULL CREAM
+4. FRESH MILK
+5. OAT MILK
+
+Setelah itu seluruh data bahan berasal dari menu Data Bahan yang sudah ada.
+
+====================================================
+
+UI
+
+Gunakan tema yang sudah ada.
+
+Tidak perlu mengubah warna.
+
+Tidak perlu mengubah sidebar.
+
+Tidak perlu mengubah dashboard.
+
+====================================================
+
+PENTING
+
+* Jangan membuat ulang database.
+* Jangan menghapus data sale.
+* Jangan menghapus recipe.
+* Jangan mengubah logika Product Sale.
+* Jangan mengubah Dashboard.
+* Jangan mengubah Authentication.
+* Jangan mengubah modul lain.
+
+Fokus hanya memperbaiki modul Stock Opname agar sesuai operasional bar.
