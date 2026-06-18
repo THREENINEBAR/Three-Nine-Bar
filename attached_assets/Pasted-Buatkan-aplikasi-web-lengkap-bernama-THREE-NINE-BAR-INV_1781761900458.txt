@@ -1,0 +1,371 @@
+Buatkan aplikasi web lengkap bernama **THREE NINE BAR INVENTORY SYSTEM** menggunakan:
+
+* Node.js
+* Express.js
+* SQLite
+* HTML
+* CSS
+* JavaScript
+* Chart.js
+
+Aplikasi harus siap digunakan (production ready), modern, ringan, cepat, dan optimal untuk Replit Free.
+
+## TEMA DAN TAMPILAN
+
+Gunakan tema premium:
+
+* Background hitam
+* Aksen gold
+* Font modern
+* Card modern dengan shadow
+* Tampilan seperti aplikasi POS profesional
+
+Website harus responsif untuk:
+
+* Android
+* iPhone
+* Tablet
+* iPad
+* Laptop
+* Desktop
+
+Gunakan Mobile First Design.
+
+## NAVIGASI
+
+### Desktop
+
+Sidebar di sebelah kiri.
+
+### Mobile
+
+Gunakan tombol Hamburger Menu (☰) di kiri atas.
+
+Saat diklik:
+
+* Sidebar muncul dari kiri dengan animasi halus.
+* Bisa ditutup kembali.
+
+Menu:
+
+* Dashboard
+* Stock Opname
+* Data Bahan
+* Data Product
+* Data Resep
+* Product Sale
+* Wasting
+* Laporan
+* User Management
+* Logout
+
+Jika data banyak, seluruh tabel harus bisa:
+
+* Scroll horizontal
+* Scroll vertikal
+* Sticky Header
+* Search
+* Pagination
+
+Tidak boleh merusak tampilan.
+
+## LOGIN DAN HAK AKSES
+
+### Admin
+
+Akses penuh:
+
+* Dashboard
+* Data Bahan
+* Data Product
+* Data Resep
+* Product Sale
+* Wasting
+* Laporan
+* User Management
+
+### Staff
+
+Hanya bisa:
+
+* Stock Opname
+* Product Sale
+* Wasting
+
+Staff tidak boleh:
+
+* Menghapus data
+* Mengubah resep
+* Mengubah product
+
+## DASHBOARD
+
+Tampilkan:
+
+* Total Bahan
+* Total Product
+* Total Penjualan Hari Ini
+* Total Wasting
+* Total Low Stock
+
+Tambahkan grafik:
+
+* Penjualan Product
+* Penggunaan Bahan
+
+Menggunakan Chart.js.
+
+## DATA BAHAN (INGREDIENT)
+
+Buat halaman khusus Data Bahan.
+
+Fitur:
+
+* Tambah Bahan
+* Edit Bahan
+* Hapus Bahan
+* Cari Bahan
+
+Field:
+
+* Nama Bahan
+* Kategori
+* Satuan
+* Stock Awal
+* Stock Minimum
+
+Contoh:
+
+* Rum
+* Vodka
+* Gin
+* Tequila
+* Triple Sec
+* Lime Juice
+* Syrup
+* Soda Water
+
+## DATA PRODUCT
+
+Fitur:
+
+* Tambah Product
+* Edit Product
+* Hapus Product
+* Cari Product
+
+Field:
+
+* Nama Product
+* Harga Jual
+* Status Aktif
+
+Contoh:
+
+* Mojito
+* Long Island
+* Margarita
+* Espresso Martini
+
+## DATA RESEP
+
+Fitur:
+
+* Tambah Resep
+* Edit Resep
+* Hapus Resep
+
+Saat membuat resep:
+
+Pilih Product terlebih dahulu.
+
+Kemudian bisa menambahkan banyak ingredient.
+
+Contoh:
+
+Product: Mojito
+
+Ingredient:
+
+* Rum = 50 ml
+* Lime Juice = 20 ml
+* Simple Syrup = 15 ml
+* Soda Water = 100 ml
+
+Product: Long Island
+
+Ingredient:
+
+* Vodka = 15 ml
+* Gin = 15 ml
+* Rum = 15 ml
+* Tequila = 15 ml
+* Triple Sec = 15 ml
+
+Satu product dapat memiliki banyak ingredient.
+
+Gunakan tombol:
+
+* Tambah Ingredient
+
+agar user bisa menambahkan ingredient tanpa batas.
+
+## PRODUCT SALE
+
+Form:
+
+* Tanggal
+* Product
+* Qty Terjual
+
+Saat tombol Simpan ditekan:
+
+Sistem harus:
+
+1. Membaca resep product
+2. Menghitung kebutuhan bahan
+3. Mengurangi stock bahan
+4. Membuat data stock movement
+5. Mengupdate nilai OUT
+6. Mengupdate Stock Akhir
+
+Semua dilakukan otomatis.
+
+Tidak boleh ada input OUT manual.
+
+## VALIDASI STOCK
+
+Jika stock bahan tidak mencukupi:
+
+Munculkan notifikasi:
+
+"Stok bahan tidak mencukupi"
+
+Dan transaksi tidak boleh disimpan.
+
+## WASTING
+
+Fitur:
+
+* Tambah Wasting
+* Edit Wasting
+* Hapus Wasting
+
+Field:
+
+* Tanggal
+* Nama Bahan
+* Qty
+* Alasan
+
+Pilihan alasan:
+
+* Pecah
+* Tumpah
+* Expired
+* Salah Produksi
+* Lainnya
+
+Saat wasting disimpan:
+
+Stock otomatis berkurang.
+
+## STOCK OPNAME
+
+Buat tabel:
+
+| Nama Bahan | Awal | In | Out | Wasting | Stock Akhir |
+
+Rumus:
+
+Stock Akhir = Awal + In - Out - Wasting
+
+OUT harus dihitung otomatis berdasarkan Product Sale dan Resep.
+
+Tidak boleh bisa diedit manual.
+
+## LOW STOCK
+
+Jika Stock Akhir lebih kecil dari Stock Minimum:
+
+* Baris berubah warna merah
+* Muncul badge "LOW STOCK"
+* Muncul notifikasi di Dashboard
+
+## LAPORAN
+
+Buat laporan:
+
+* Stock Opname
+* Product Sale
+* Wasting
+* Penggunaan Bahan
+* Low Stock
+
+Filter:
+
+* Harian
+* Mingguan
+* Bulanan
+* Custom Date
+
+## EXPORT
+
+Tambahkan tombol:
+
+* Export Excel
+* Export PDF
+* Print
+
+## DATABASE SQLITE
+
+Buat tabel:
+
+users
+ingredients
+products
+recipes
+recipe_details
+sales
+sale_details
+wasting
+stock_movements
+
+Gunakan foreign key.
+
+## PERHITUNGAN STOCK
+
+Contoh:
+
+Stock Rum = 1000 ml
+
+Resep Mojito:
+
+Rum = 50 ml
+
+Mojito terjual = 10
+
+Maka:
+
+OUT Rum = 500 ml
+
+Stock Akhir = 500 ml
+
+Semua perhitungan harus realtime dan otomatis.
+
+## FITUR TAMBAHAN
+
+* Loading Spinner
+* Toast Notification
+* Modal Konfirmasi Hapus
+* Auto Refresh Data
+* Search Cepat
+* Pagination
+* Dark Mode Premium
+* Sidebar Responsif
+* Hamburger Menu Responsif
+* Scroll Otomatis Jika Data Banyak
+* Clean Code
+* Struktur Folder Rapi
+
+Buat seluruh halaman, route, database, CRUD, dashboard, sistem perhitungan stock otomatis, dan sample data agar aplikasi langsung bisa dijalankan setelah npm install dan npm start di Replit.

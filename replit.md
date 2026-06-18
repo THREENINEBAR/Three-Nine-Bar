@@ -1,20 +1,28 @@
-# [Project name]
+# THREE NINE BAR INVENTORY SYSTEM
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+A full-stack bar inventory management system for cocktail bars with role-based access, automatic stock calculations, sales tracking, wasting logs, and reports.
 
 ## Run & Operate
 
-- `pnpm --filter @workspace/api-server run dev` — run the API server (port 5000)
+- `pnpm --filter @workspace/api-server run dev` — run the API server (port 8080)
+- `pnpm --filter @workspace/three-nine-bar run dev` — run the frontend (port 21572)
 - `pnpm run typecheck` — full typecheck across all packages
 - `pnpm run build` — typecheck + build all packages
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
 - `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
 - Required env: `DATABASE_URL` — Postgres connection string
+- Required env: `SESSION_SECRET` — session signing secret
+
+## Default Credentials
+
+- **Admin**: username `admin` / password `admin123`
+- **Staff**: username `staff1` / password `staff123`
 
 ## Stack
 
 - pnpm workspaces, Node.js 24, TypeScript 5.9
-- API: Express 5
+- Frontend: React + Vite, Tailwind CSS, Recharts, shadcn/ui
+- API: Express 5 + express-session
 - DB: PostgreSQL + Drizzle ORM
 - Validation: Zod (`zod/v4`), `drizzle-zod`
 - API codegen: Orval (from OpenAPI spec)
@@ -22,15 +30,25 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `lib/api-spec/openapi.yaml` — API contract (source of truth)
+- `lib/db/src/schema/` — database schema (Drizzle tables)
+- `artifacts/api-server/src/routes/` — Express route handlers
+- `artifacts/three-nine-bar/src/` — React frontend
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- Auth via express-session (cookie-based, no JWT). Session secret from env var.
+- Stock is tracked directly on `ingredients.current_stock` and adjusted on every sale/wasting/stock-add.
+- `stock_movements` table records every IN/OUT/WASTING event for audit trail.
+- Stock Opname is computed (read-only) from movements + current stock; OUT is never entered manually.
+- Sales deduct stock atomically: check sufficiency → create sale → deduct ingredients → record movements.
+- Recipes use a `recipes` + `recipe_details` table; one recipe per product.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+**Admin can access:** Dashboard, Data Bahan, Data Product, Data Resep, Product Sale, Wasting, Stock Opname, Laporan, User Management
+
+**Staff can access:** Stock Opname, Product Sale, Wasting
 
 ## User preferences
 
@@ -38,7 +56,11 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Always run `pnpm --filter @workspace/api-spec run codegen` after changing `openapi.yaml`
+- After schema changes in `lib/db/src/schema/`, run `pnpm --filter @workspace/db run push`
+- `SESSION_SECRET` env var must be set or API server throws on start
+- Never manually edit the `current_stock` field without also inserting a `stock_movements` row
+- `db.sql` is not valid — always import `sql` from `drizzle-orm`
 
 ## Pointers
 

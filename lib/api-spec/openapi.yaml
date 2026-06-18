@@ -1,22 +1,38 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: THREE NINE BAR Inventory System API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication
+  - name: users
+    description: User management
+  - name: ingredients
+    description: Ingredient management
+  - name: products
+    description: Product management
+  - name: recipes
+    description: Recipe management
+  - name: sales
+    description: Product sales
+  - name: wasting
+    description: Wasting records
+  - name: stock
+    description: Stock opname
+  - name: reports
+    description: Reports and dashboard
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +40,628 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout
+      responses:
+        "200":
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /auth/me:
+    get:
+      operationId: getCurrentUser
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /users:
+    get:
+      operationId: listUsers
+      tags: [users]
+      summary: List all users
+      responses:
+        "200":
+          description: List of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+    post:
+      operationId: createUser
+      tags: [users]
+      summary: Create user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      operationId: updateUser
+      tags: [users]
+      summary: Update user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdate"
+      responses:
+        "200":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      operationId: deleteUser
+      tags: [users]
+      summary: Delete user
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /ingredients:
+    get:
+      operationId: listIngredients
+      tags: [ingredients]
+      summary: List ingredients
+      responses:
+        "200":
+          description: List of ingredients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Ingredient"
+    post:
+      operationId: createIngredient
+      tags: [ingredients]
+      summary: Create ingredient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IngredientInput"
+      responses:
+        "201":
+          description: Ingredient created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ingredient"
+
+  /ingredients/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      operationId: updateIngredient
+      tags: [ingredients]
+      summary: Update ingredient
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IngredientInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Ingredient"
+    delete:
+      operationId: deleteIngredient
+      tags: [ingredients]
+      summary: Delete ingredient
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /products:
+    get:
+      operationId: listProducts
+      tags: [products]
+      summary: List products
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+    post:
+      operationId: createProduct
+      tags: [products]
+      summary: Create product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+  /products/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      operationId: updateProduct
+      tags: [products]
+      summary: Update product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+    delete:
+      operationId: deleteProduct
+      tags: [products]
+      summary: Delete product
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /recipes:
+    get:
+      operationId: listRecipes
+      tags: [recipes]
+      summary: List recipes
+      responses:
+        "200":
+          description: List of recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Recipe"
+    post:
+      operationId: createRecipe
+      tags: [recipes]
+      summary: Create recipe with ingredients
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RecipeInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+
+  /recipes/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      operationId: getRecipe
+      tags: [recipes]
+      summary: Get recipe details
+      responses:
+        "200":
+          description: Recipe with ingredients
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+    put:
+      operationId: updateRecipe
+      tags: [recipes]
+      summary: Update recipe
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RecipeInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recipe"
+    delete:
+      operationId: deleteRecipe
+      tags: [recipes]
+      summary: Delete recipe
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /sales:
+    get:
+      operationId: listSales
+      tags: [sales]
+      summary: List sales
+      parameters:
+        - name: startDate
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of sales
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sale"
+    post:
+      operationId: createSale
+      tags: [sales]
+      summary: Record a sale (auto-deducts stock)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaleInput"
+      responses:
+        "201":
+          description: Sale recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sale"
+        "400":
+          description: Insufficient stock
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /sales/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    delete:
+      operationId: deleteSale
+      tags: [sales]
+      summary: Delete sale (restores stock)
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /wasting:
+    get:
+      operationId: listWasting
+      tags: [wasting]
+      summary: List wasting records
+      parameters:
+        - name: startDate
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of wasting records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Wasting"
+    post:
+      operationId: createWasting
+      tags: [wasting]
+      summary: Record wasting (auto-deducts stock)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WastingInput"
+      responses:
+        "201":
+          description: Wasting recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Wasting"
+
+  /wasting/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      operationId: updateWasting
+      tags: [wasting]
+      summary: Update wasting record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WastingInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Wasting"
+    delete:
+      operationId: deleteWasting
+      tags: [wasting]
+      summary: Delete wasting record (restores stock)
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /stock/opname:
+    get:
+      operationId: getStockOpname
+      tags: [stock]
+      summary: Get stock opname (computed, read-only)
+      responses:
+        "200":
+          description: Stock opname data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StockOpname"
+
+  /stock/movements:
+    get:
+      operationId: listStockMovements
+      tags: [stock]
+      summary: List stock movements
+      parameters:
+        - name: ingredientId
+          in: query
+          schema:
+            type: integer
+        - name: startDate
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Stock movements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StockMovement"
+
+  /stock/add:
+    post:
+      operationId: addStock
+      tags: [stock]
+      summary: Add stock (IN movement)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StockAddInput"
+      responses:
+        "201":
+          description: Stock added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockMovement"
+
+  /reports/dashboard:
+    get:
+      operationId: getDashboard
+      tags: [reports]
+      summary: Get dashboard summary
+      responses:
+        "200":
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /reports/sales-by-product:
+    get:
+      operationId: getSalesByProduct
+      tags: [reports]
+      summary: Sales grouped by product
+      parameters:
+        - name: startDate
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Sales by product
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SalesByProduct"
+
+  /reports/ingredient-usage:
+    get:
+      operationId: getIngredientUsage
+      tags: [reports]
+      summary: Ingredient usage report
+      parameters:
+        - name: startDate
+          in: query
+          schema:
+            type: string
+        - name: endDate
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Ingredient usage
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/IngredientUsage"
+
+  /reports/low-stock:
+    get:
+      operationId: getLowStock
+      tags: [reports]
+      summary: Get low stock ingredients
+      responses:
+        "200":
+          description: Low stock items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StockOpname"
+
 components:
   schemas:
     HealthStatus:
@@ -31,6 +669,386 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required: [success]
+
+    LoginInput:
+      type: object
+      required: [username, password]
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    AuthResponse:
+      type: object
+      required: [user]
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+
+    User:
+      type: object
+      required: [id, username, role, isActive]
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        name:
+          type: ["string", "null"]
+        role:
+          type: string
+          enum: [admin, staff]
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+
+    UserInput:
+      type: object
+      required: [username, password, role]
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum: [admin, staff]
+        isActive:
+          type: boolean
+
+    UserUpdate:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum: [admin, staff]
+        isActive:
+          type: boolean
+
+    Ingredient:
+      type: object
+      required: [id, name, category, unit, stockInitial, stockMinimum, currentStock]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+        unit:
+          type: string
+        stockInitial:
+          type: number
+        stockMinimum:
+          type: number
+        currentStock:
+          type: number
+        isLowStock:
+          type: boolean
+        createdAt:
+          type: string
+
+    IngredientInput:
+      type: object
+      required: [name, category, unit, stockInitial, stockMinimum]
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        unit:
+          type: string
+        stockInitial:
+          type: number
+        stockMinimum:
+          type: number
+
+    Product:
+      type: object
+      required: [id, name, price, isActive]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        price:
+          type: number
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+
+    ProductInput:
+      type: object
+      required: [name, price]
+      properties:
+        name:
+          type: string
+        price:
+          type: number
+        isActive:
+          type: boolean
+
+    RecipeDetail:
+      type: object
+      required: [ingredientId, ingredientName, unit, quantity]
+      properties:
+        id:
+          type: integer
+        ingredientId:
+          type: integer
+        ingredientName:
+          type: string
+        unit:
+          type: string
+        quantity:
+          type: number
+
+    RecipeDetailInput:
+      type: object
+      required: [ingredientId, quantity]
+      properties:
+        ingredientId:
+          type: integer
+        quantity:
+          type: number
+
+    Recipe:
+      type: object
+      required: [id, productId, productName]
+      properties:
+        id:
+          type: integer
+        productId:
+          type: integer
+        productName:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecipeDetail"
+        createdAt:
+          type: string
+
+    RecipeInput:
+      type: object
+      required: [productId, details]
+      properties:
+        productId:
+          type: integer
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecipeDetailInput"
+
+    Sale:
+      type: object
+      required: [id, saleDate, productId, productName, qty, totalPrice]
+      properties:
+        id:
+          type: integer
+        saleDate:
+          type: string
+        productId:
+          type: integer
+        productName:
+          type: string
+        qty:
+          type: integer
+        totalPrice:
+          type: number
+        createdAt:
+          type: string
+
+    SaleInput:
+      type: object
+      required: [saleDate, productId, qty]
+      properties:
+        saleDate:
+          type: string
+        productId:
+          type: integer
+        qty:
+          type: integer
+
+    Wasting:
+      type: object
+      required: [id, wastingDate, ingredientId, ingredientName, qty, unit, reason]
+      properties:
+        id:
+          type: integer
+        wastingDate:
+          type: string
+        ingredientId:
+          type: integer
+        ingredientName:
+          type: string
+        qty:
+          type: number
+        unit:
+          type: string
+        reason:
+          type: string
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    WastingInput:
+      type: object
+      required: [wastingDate, ingredientId, qty, reason]
+      properties:
+        wastingDate:
+          type: string
+        ingredientId:
+          type: integer
+        qty:
+          type: number
+        reason:
+          type: string
+        notes:
+          type: string
+
+    StockOpname:
+      type: object
+      required: [ingredientId, ingredientName, unit, category, stockInitial, stockIn, stockOut, stockWasting, stockFinal, stockMinimum, isLowStock]
+      properties:
+        ingredientId:
+          type: integer
+        ingredientName:
+          type: string
+        unit:
+          type: string
+        category:
+          type: string
+        stockInitial:
+          type: number
+        stockIn:
+          type: number
+        stockOut:
+          type: number
+        stockWasting:
+          type: number
+        stockFinal:
+          type: number
+        stockMinimum:
+          type: number
+        isLowStock:
+          type: boolean
+
+    StockMovement:
+      type: object
+      required: [id, ingredientId, ingredientName, movementType, qty, unit, referenceType, createdAt]
+      properties:
+        id:
+          type: integer
+        ingredientId:
+          type: integer
+        ingredientName:
+          type: string
+        movementType:
+          type: string
+          enum: [in, out, wasting]
+        qty:
+          type: number
+        unit:
+          type: string
+        referenceType:
+          type: string
+        referenceId:
+          type: ["integer", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    StockAddInput:
+      type: object
+      required: [ingredientId, qty]
+      properties:
+        ingredientId:
+          type: integer
+        qty:
+          type: number
+        notes:
+          type: string
+
+    DashboardSummary:
+      type: object
+      required: [totalIngredients, totalProducts, totalSalesToday, totalWastingToday, totalLowStock, recentSales, salesChart, ingredientUsageChart]
+      properties:
+        totalIngredients:
+          type: integer
+        totalProducts:
+          type: integer
+        totalSalesToday:
+          type: number
+        totalWastingToday:
+          type: number
+        totalLowStock:
+          type: integer
+        recentSales:
+          type: array
+          items:
+            $ref: "#/components/schemas/Sale"
+        salesChart:
+          type: array
+          items:
+            $ref: "#/components/schemas/SalesByProduct"
+        ingredientUsageChart:
+          type: array
+          items:
+            $ref: "#/components/schemas/IngredientUsage"
+
+    SalesByProduct:
+      type: object
+      required: [productId, productName, totalQty, totalRevenue]
+      properties:
+        productId:
+          type: integer
+        productName:
+          type: string
+        totalQty:
+          type: integer
+        totalRevenue:
+          type: number
+
+    IngredientUsage:
+      type: object
+      required: [ingredientId, ingredientName, unit, totalUsed]
+      properties:
+        ingredientId:
+          type: integer
+        ingredientName:
+          type: string
+        unit:
+          type: string
+        totalUsed:
+          type: number
