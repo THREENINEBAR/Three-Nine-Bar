@@ -18,4 +18,5 @@ export interface StockOpname {
   stockFinal: number;
   stockMinimum: number;
   isLowStock: boolean;
+  currentStock: number;
 }

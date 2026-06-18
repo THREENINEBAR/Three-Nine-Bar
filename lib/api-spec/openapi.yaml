@@ -529,6 +529,12 @@ paths:
       operationId: getStockOpname
       tags: [stock]
       summary: Get stock opname (computed, read-only)
+      parameters:
+        - name: date
+          in: query
+          description: Filter by date (YYYY-MM-DD). If omitted, returns all-time totals.
+          schema:
+            type: string
       responses:
         "200":
           description: Stock opname data
@@ -938,7 +944,7 @@ components:
 
     StockOpname:
       type: object
-      required: [ingredientId, ingredientName, unit, category, stockInitial, stockIn, stockOut, stockWasting, stockFinal, stockMinimum, isLowStock]
+      required: [ingredientId, ingredientName, unit, category, stockInitial, stockIn, stockOut, stockWasting, stockFinal, stockMinimum, isLowStock, currentStock]
       properties:
         ingredientId:
           type: integer
@@ -962,6 +968,8 @@ components:
           type: number
         isLowStock:
           type: boolean
+        currentStock:
+          type: number
 
     StockMovement:
       type: object
@@ -1002,7 +1010,7 @@ components:
 
     DashboardSummary:
       type: object
-      required: [totalIngredients, totalProducts, totalSalesToday, totalWastingToday, totalLowStock, recentSales, salesChart, ingredientUsageChart]
+      required: [totalIngredients, totalProducts, totalSalesToday, totalWastingToday, totalLowStock, stockInToday, stockOutToday, wastingQtyToday, recentSales, salesChart, ingredientUsageChart]
       properties:
         totalIngredients:
           type: integer
@@ -1014,6 +1022,12 @@ components:
           type: number
         totalLowStock:
           type: integer
+        stockInToday:
+          type: number
+        stockOutToday:
+          type: number
+        wastingQtyToday:
+          type: number
         recentSales:
           type: array
           items:

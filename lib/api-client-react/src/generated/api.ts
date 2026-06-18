@@ -25,6 +25,7 @@ import type {
   ErrorResponse,
   GetIngredientUsageParams,
   GetSalesByProductParams,
+  GetStockOpnameParams,
   HealthStatus,
   Ingredient,
   IngredientInput,
@@ -2117,20 +2118,27 @@ export const useDeleteWasting = <TError = ErrorType<unknown>,
       return useMutation(getDeleteWastingMutationOptions(options));
     }
 
-export const getGetStockOpnameUrl = () => {
+export const getGetStockOpnameUrl = (params?: GetStockOpnameParams,) => {
+  const normalizedParams = new URLSearchParams();
 
+  Object.entries(params || {}).forEach(([key, value]) => {
 
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
 
+  const stringifiedParams = normalizedParams.toString();
 
-  return `/api/stock/opname`
+  return stringifiedParams.length > 0 ? `/api/stock/opname?${stringifiedParams}` : `/api/stock/opname`
 }
 
 /**
  * @summary Get stock opname (computed, read-only)
  */
-export const getStockOpname = async ( options?: RequestInit): Promise<StockOpname[]> => {
+export const getStockOpname = async (params?: GetStockOpnameParams, options?: RequestInit): Promise<StockOpname[]> => {
 
-  return customFetch<StockOpname[]>(getGetStockOpnameUrl(),
+  return customFetch<StockOpname[]>(getGetStockOpnameUrl(params),
   {
     ...options,
     method: 'GET'
@@ -2143,23 +2151,23 @@ export const getStockOpname = async ( options?: RequestInit): Promise<StockOpnam
 
 
 
-export const getGetStockOpnameQueryKey = () => {
+export const getGetStockOpnameQueryKey = (params?: GetStockOpnameParams,) => {
     return [
-    `/api/stock/opname`
+    `/api/stock/opname`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getGetStockOpnameQueryOptions = <TData = Awaited<ReturnType<typeof getStockOpname>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getStockOpname>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+export const getGetStockOpnameQueryOptions = <TData = Awaited<ReturnType<typeof getStockOpname>>, TError = ErrorType<unknown>>(params?: GetStockOpnameParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getStockOpname>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetStockOpnameQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetStockOpnameQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getStockOpname>>> = ({ signal }) => getStockOpname({ signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getStockOpname>>> = ({ signal }) => getStockOpname(params, { signal, ...requestOptions });
 
 
 
@@ -2177,11 +2185,11 @@ export type GetStockOpnameQueryError = ErrorType<unknown>
  */
 
 export function useGetStockOpname<TData = Awaited<ReturnType<typeof getStockOpname>>, TError = ErrorType<unknown>>(
-  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getStockOpname>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+ params?: GetStockOpnameParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getStockOpname>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
 
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const queryOptions = getGetStockOpnameQueryOptions(options)
+  const queryOptions = getGetStockOpnameQueryOptions(params,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 

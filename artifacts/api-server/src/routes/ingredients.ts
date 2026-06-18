@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { db, ingredientsTable } from "@workspace/db";
+import { db, ingredientsTable, recipeDetailsTable, recipesTable, wastingTable, stockMovementsTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 
 const router: IRouter = Router();
@@ -55,6 +55,22 @@ router.put("/ingredients/:id", async (req, res) => {
 
 router.delete("/ingredients/:id", async (req, res) => {
   const id = parseInt(req.params.id);
+  // Cascade: remove from recipe_details first
+  const recipeDetailRows = await db.select().from(recipeDetailsTable).where(eq(recipeDetailsTable.ingredientId, id));
+  if (recipeDetailRows.length > 0) {
+    const recipeIds = [...new Set(recipeDetailRows.map(r => r.recipeId))];
+    await db.delete(recipeDetailsTable).where(eq(recipeDetailsTable.ingredientId, id));
+    // If the recipe has no more details, delete the recipe itself
+    for (const recipeId of recipeIds) {
+      const remaining = await db.select().from(recipeDetailsTable).where(eq(recipeDetailsTable.recipeId, recipeId));
+      if (remaining.length === 0) {
+        await db.delete(recipesTable).where(eq(recipesTable.id, recipeId));
+      }
+    }
+  }
+  // Delete related wasting and stock movements
+  await db.delete(wastingTable).where(eq(wastingTable.ingredientId, id));
+  await db.delete(stockMovementsTable).where(eq(stockMovementsTable.ingredientId, id));
   await db.delete(ingredientsTable).where(eq(ingredientsTable.id, id));
   res.json({ success: true, message: "Ingredient deleted" });
 });

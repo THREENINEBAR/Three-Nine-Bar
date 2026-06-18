@@ -1,6 +1,6 @@
 import { Router, type IRouter } from "express";
-import { db, salesTable, wastingTable, ingredientsTable, productsTable, stockMovementsTable, recipeDetailsTable, recipesTable } from "@workspace/db";
-import { eq, gte, lte, and, sql } from "drizzle-orm";
+import { db, salesTable, wastingTable, ingredientsTable, productsTable, stockMovementsTable } from "@workspace/db";
+import { eq, gte, lte, and } from "drizzle-orm";
 
 const router: IRouter = Router();
 
@@ -10,16 +10,30 @@ router.get("/reports/dashboard", async (_req, res) => {
   const products = await db.select().from(productsTable);
   const todaySales = await db.select().from(salesTable).where(eq(salesTable.saleDate, today));
   const todayWasting = await db.select().from(wastingTable).where(eq(wastingTable.wastingDate, today));
+  const allMovements = await db.select().from(stockMovementsTable);
+
   const totalIngredients = ingredients.length;
   const totalProducts = products.length;
   const totalSalesToday = todaySales.reduce((s, r) => s + r.totalPrice, 0);
   const totalWastingToday = todayWasting.reduce((s, r) => s + r.qty, 0);
   const totalLowStock = ingredients.filter(i => i.currentStock <= i.stockMinimum).length;
+
+  // Today's movements
+  const todayMovements = allMovements.filter(m => m.createdAt.toISOString().split("T")[0] === today);
+  const stockInToday = todayMovements.filter(m => m.movementType === "in").reduce((s, m) => s + m.qty, 0);
+  const stockOutToday = todayMovements.filter(m => m.movementType === "out").reduce((s, m) => s + m.qty, 0);
+  const wastingQtyToday = todayMovements.filter(m => m.movementType === "wasting").reduce((s, m) => s + m.qty, 0);
+
   // Recent 5 sales
-  const allSales = await db.select().from(salesTable).orderBy(salesTable.createdAt).limit(5);
+  const allSales = await db.select().from(salesTable).orderBy(salesTable.createdAt);
   const productMap = new Map(products.map(p => [p.id, p]));
-  const recentSales = allSales.map(s => ({ id: s.id, saleDate: s.saleDate, productId: s.productId, productName: productMap.get(s.productId)?.name || "", qty: s.qty, totalPrice: s.totalPrice, createdAt: s.createdAt.toISOString() }));
-  // Sales chart (last 7 days by product)
+  const recentSales = allSales.slice(-5).reverse().map(s => ({
+    id: s.id, saleDate: s.saleDate, productId: s.productId,
+    productName: productMap.get(s.productId)?.name || "",
+    qty: s.qty, totalPrice: s.totalPrice, createdAt: s.createdAt.toISOString(),
+  }));
+
+  // Sales chart (all time by product)
   const allSalesAll = await db.select().from(salesTable);
   const salesByProduct: Record<number, { productId: number; productName: string; totalQty: number; totalRevenue: number }> = {};
   for (const s of allSalesAll) {
@@ -29,23 +43,28 @@ router.get("/reports/dashboard", async (_req, res) => {
     salesByProduct[s.productId].totalQty += s.qty;
     salesByProduct[s.productId].totalRevenue += s.totalPrice;
   }
+
   // Ingredient usage chart
-  const movements = await db.select().from(stockMovementsTable).where(eq(stockMovementsTable.movementType, "out"));
+  const outMovements = allMovements.filter(m => m.movementType === "out");
   const ingMap = new Map(ingredients.map(i => [i.id, i]));
   const usageByIng: Record<number, { ingredientId: number; ingredientName: string; unit: string; totalUsed: number }> = {};
-  for (const m of movements) {
+  for (const m of outMovements) {
     if (!usageByIng[m.ingredientId]) {
       const ing = ingMap.get(m.ingredientId);
       usageByIng[m.ingredientId] = { ingredientId: m.ingredientId, ingredientName: ing?.name || "", unit: ing?.unit || "", totalUsed: 0 };
     }
     usageByIng[m.ingredientId].totalUsed += m.qty;
   }
+
   res.json({
     totalIngredients,
     totalProducts,
     totalSalesToday,
     totalWastingToday,
     totalLowStock,
+    stockInToday,
+    stockOutToday,
+    wastingQtyToday,
     recentSales,
     salesChart: Object.values(salesByProduct),
     ingredientUsageChart: Object.values(usageByIng).slice(0, 10),
@@ -75,11 +94,14 @@ router.get("/reports/sales-by-product", async (req, res) => {
 
 router.get("/reports/ingredient-usage", async (req, res) => {
   const { startDate, endDate } = req.query as { startDate?: string; endDate?: string };
-  const movements = await db.select().from(stockMovementsTable).where(eq(stockMovementsTable.movementType, "out"));
+  const allMovements = await db.select().from(stockMovementsTable);
   const ingredients = await db.select().from(ingredientsTable);
   const ingMap = new Map(ingredients.map(i => [i.id, i]));
+  let outMovements = allMovements.filter(m => m.movementType === "out");
+  if (startDate) outMovements = outMovements.filter(m => m.createdAt.toISOString().split("T")[0] >= startDate);
+  if (endDate) outMovements = outMovements.filter(m => m.createdAt.toISOString().split("T")[0] <= endDate);
   const usage: Record<number, { ingredientId: number; ingredientName: string; unit: string; totalUsed: number }> = {};
-  for (const m of movements) {
+  for (const m of outMovements) {
     if (!usage[m.ingredientId]) {
       const ing = ingMap.get(m.ingredientId);
       usage[m.ingredientId] = { ingredientId: m.ingredientId, ingredientName: ing?.name || "", unit: ing?.unit || "", totalUsed: 0 };

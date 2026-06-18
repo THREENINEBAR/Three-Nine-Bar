@@ -186,6 +186,7 @@ export interface StockOpname {
   stockFinal: number;
   stockMinimum: number;
   isLowStock: boolean;
+  currentStock: number;
 }
 
 export type StockMovementMovementType = typeof StockMovementMovementType[keyof typeof StockMovementMovementType];
@@ -238,6 +239,9 @@ export interface DashboardSummary {
   totalSalesToday: number;
   totalWastingToday: number;
   totalLowStock: number;
+  stockInToday: number;
+  stockOutToday: number;
+  wastingQtyToday: number;
   recentSales: Sale[];
   salesChart: SalesByProduct[];
   ingredientUsageChart: IngredientUsage[];
@@ -251,6 +255,13 @@ endDate?: string;
 export type ListWastingParams = {
 startDate?: string;
 endDate?: string;
+};
+
+export type GetStockOpnameParams = {
+/**
+ * Filter by date (YYYY-MM-DD). If omitted, returns all-time totals.
+ */
+date?: string;
 };
 
 export type ListStockMovementsParams = {

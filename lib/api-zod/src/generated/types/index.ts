@@ -11,6 +11,7 @@ export * from './dashboardSummary';
 export * from './errorResponse';
 export * from './getIngredientUsageParams';
 export * from './getSalesByProductParams';
+export * from './getStockOpnameParams';
 export * from './healthStatus';
 export * from './ingredient';
 export * from './ingredientInput';

@@ -467,6 +467,10 @@ export const DeleteWastingResponse = zod.object({
 /**
  * @summary Get stock opname (computed, read-only)
  */
+export const GetStockOpnameQueryParams = zod.object({
+  "date": zod.coerce.string().optional().describe('Filter by date (YYYY-MM-DD). If omitted, returns all-time totals.')
+})
+
 export const GetStockOpnameResponseItem = zod.object({
   "ingredientId": zod.number(),
   "ingredientName": zod.string(),
@@ -478,7 +482,8 @@ export const GetStockOpnameResponseItem = zod.object({
   "stockWasting": zod.number(),
   "stockFinal": zod.number(),
   "stockMinimum": zod.number(),
-  "isLowStock": zod.boolean()
+  "isLowStock": zod.boolean(),
+  "currentStock": zod.number()
 })
 export const GetStockOpnameResponse = zod.array(GetStockOpnameResponseItem)
 
@@ -526,6 +531,9 @@ export const GetDashboardResponse = zod.object({
   "totalSalesToday": zod.number(),
   "totalWastingToday": zod.number(),
   "totalLowStock": zod.number(),
+  "stockInToday": zod.number(),
+  "stockOutToday": zod.number(),
+  "wastingQtyToday": zod.number(),
   "recentSales": zod.array(zod.object({
   "id": zod.number(),
   "saleDate": zod.string(),
@@ -598,7 +606,8 @@ export const GetLowStockResponseItem = zod.object({
   "stockWasting": zod.number(),
   "stockFinal": zod.number(),
   "stockMinimum": zod.number(),
-  "isLowStock": zod.boolean()
+  "isLowStock": zod.boolean(),
+  "currentStock": zod.number()
 })
 export const GetLowStockResponse = zod.array(GetLowStockResponseItem)
 

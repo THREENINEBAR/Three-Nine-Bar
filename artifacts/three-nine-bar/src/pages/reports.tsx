@@ -222,8 +222,8 @@ export default function ReportsPage() {
                   </thead>
                   <tbody>
                     {!loadingLowStock && lowStockData?.map((item) => (
-                      <tr key={item.id} className="border-b border-border/20 bg-destructive/5">
-                        <td className="py-3 font-medium text-destructive">{item.name}</td>
+                      <tr key={item.ingredientId} className="border-b border-border/20 bg-destructive/5">
+                        <td className="py-3 font-medium text-destructive">{item.ingredientName}</td>
                         <td className="py-3 text-muted-foreground">{item.category}</td>
                         <td className="py-3 text-right font-mono">{item.stockMinimum} <span className="text-xs text-muted-foreground">{item.unit}</span></td>
                         <td className="py-3 text-right font-mono font-bold text-destructive">{item.currentStock} <span className="text-xs font-normal text-muted-foreground">{item.unit}</span></td>

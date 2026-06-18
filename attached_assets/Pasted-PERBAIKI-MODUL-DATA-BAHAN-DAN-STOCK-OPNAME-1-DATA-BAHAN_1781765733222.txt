@@ -1,0 +1,141 @@
+PERBAIKI MODUL DATA BAHAN DAN STOCK OPNAME.
+
+1. DATA BAHAN
+
+Saat ini tombol Hapus Data Bahan tidak berfungsi.
+
+Perbaiki agar:
+
+* Tambah Bahan berfungsi.
+* Edit Bahan berfungsi.
+* Hapus Bahan berfungsi.
+* Setelah dihapus langsung refresh tabel.
+* Tidak ada error foreign key.
+* Jika bahan masih digunakan dalam resep, tampilkan konfirmasi terlebih dahulu.
+
+2. UBAH KONSEP STOCK OPNAME
+
+Jangan gunakan sistem:
+
+Stock Awal + IN + OUT seperti sekarang.
+
+Saya ingin sistem stock opname seperti operasional bar.
+
+Setiap bahan memiliki:
+
+* Nama Bahan
+* Stock Saat Ini
+* Tombol Tambah Stock (➕)
+
+Contoh:
+
+Arabica Coffee
+Stock Saat Ini: 500 gram
+[ + Tambah Stock ]
+
+Rum
+Stock Saat Ini: 2000 ml
+[ + Tambah Stock ]
+
+3. FITUR TAMBAH STOCK
+
+Saat tombol ➕ ditekan:
+
+Muncul modal:
+
+Tambah Stock
+
+Field:
+
+* Tanggal
+* Qty Masuk
+* Keterangan
+
+Contoh:
+
+Qty Masuk = 1000
+
+Setelah simpan:
+
+Stock bertambah otomatis.
+
+Contoh:
+
+Stock sebelumnya = 500
+
+Tambah = 1000
+
+Stock baru = 1500
+
+Simpan ke stock_movements dengan tipe IN.
+
+4. OUT TETAP OTOMATIS
+
+OUT tidak boleh diinput manual.
+
+OUT hanya berasal dari:
+
+* Product Sale
+* Resep Product
+
+Contoh:
+
+Mojito terjual 10
+
+Rum 50 ml
+
+Maka:
+
+OUT Rum = 500 ml
+
+Otomatis.
+
+5. HALAMAN STOCK OPNAME
+
+Buat tabel seperti stock opname bar pada foto.
+
+Kolom:
+
+Nama Bahan | Stock Awal Hari Ini | IN | OUT | Wasting | Stock Akhir
+
+Perhitungan:
+
+Stock Akhir = Awal + IN - OUT - Wasting
+
+Tampilkan per hari.
+
+Tambahkan filter:
+
+* Tanggal
+* Bulan
+* Tahun
+
+6. RIWAYAT STOCK
+
+Saat klik bahan:
+
+Tampilkan histori:
+
+Tanggal | Jenis | Qty | Keterangan
+
+Contoh:
+
+10/06/2026 | IN | 1000 | Barang Datang
+10/06/2026 | OUT | 250 | Product Sale
+10/06/2026 | WASTING | 50 | Tumpah
+
+7. DASHBOARD
+
+Tambahkan:
+
+* Total Stock Masuk Hari Ini
+* Total Stock Keluar Hari Ini
+* Total Wasting Hari Ini
+
+8. JANGAN HAPUS DATA SALE DAN RESEP
+
+Tetap gunakan sistem resep yang sudah ada.
+
+Yang diubah hanya cara penambahan stock dan tampilan stock opname agar sesuai operasional bar dan coffee shop.
+
+Pastikan seluruh fitur berjalan tanpa error dan seluruh CRUD Data Bahan berfungsi.
