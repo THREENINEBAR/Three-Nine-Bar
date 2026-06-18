@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { 
   useListRecipes, 
   useCreateRecipe, 
@@ -8,7 +8,7 @@ import {
   useListIngredients,
   getListRecipesQueryKey
 } from "@workspace/api-client-react";
-import { Recipe, RecipeDetailInput } from "@workspace/api-client-react/src/generated/api.schemas";
+import type { Recipe, RecipeDetailInput } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";

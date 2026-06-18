@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { db, productsTable } from "@workspace/db";
+import { db, productsTable, recipesTable, recipeDetailsTable, salesTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 
 const router: IRouter = Router();
@@ -36,6 +36,14 @@ router.put("/products/:id", async (req, res) => {
 
 router.delete("/products/:id", async (req, res) => {
   const id = parseInt(req.params.id);
+  // Cascade: delete recipe details → recipes → product
+  const relatedRecipes = await db.select().from(recipesTable).where(eq(recipesTable.productId, id));
+  for (const recipe of relatedRecipes) {
+    await db.delete(recipeDetailsTable).where(eq(recipeDetailsTable.recipeId, recipe.id));
+  }
+  await db.delete(recipesTable).where(eq(recipesTable.productId, id));
+  // Nullify sales references before deleting (set to a fallback or just delete)
+  await db.delete(salesTable).where(eq(salesTable.productId, id));
   await db.delete(productsTable).where(eq(productsTable.id, id));
   res.json({ success: true, message: "Product deleted" });
 });
