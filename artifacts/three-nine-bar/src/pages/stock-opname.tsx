@@ -280,48 +280,50 @@ export default function StockOpnamePage() {
 
       {/* ── MODAL: Input Stock Awal ── */}
       <Dialog open={isInitialOpen} onOpenChange={setIsInitialOpen}>
-        <DialogContent className="bg-card border-border sm:max-w-[420px]">
+        <DialogContent className="bg-card border-border sm:max-w-[420px] flex flex-col max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-xl uppercase tracking-wider text-primary">Input Stock Awal</DialogTitle>
             <p className="text-sm text-muted-foreground font-medium">{initialIngredient?.ingredientName}</p>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Tanggal</Label>
-              <Input
-                type="date"
-                value={initialForm.date}
-                onChange={e => setInitialForm({ ...initialForm, date: e.target.value })}
-                className="bg-background"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">
-                Qty Stock Awal ({initialIngredient?.unit})
-              </Label>
-              <Input
-                type="number"
-                min="0.1"
-                step="any"
-                placeholder="0"
-                value={initialForm.qty}
-                onChange={e => setInitialForm({ ...initialForm, qty: e.target.value })}
-                className="bg-background font-mono text-lg"
-                autoFocus
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Keterangan</Label>
-              <Textarea
-                value={initialForm.notes}
-                onChange={e => setInitialForm({ ...initialForm, notes: e.target.value })}
-                className="bg-background resize-none"
-                rows={2}
-                placeholder="Opening Shift"
-              />
+          <div className="overflow-y-auto overscroll-contain flex-1">
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label className="text-xs uppercase tracking-wider text-muted-foreground">Tanggal</Label>
+                <Input
+                  type="date"
+                  value={initialForm.date}
+                  onChange={e => setInitialForm({ ...initialForm, date: e.target.value })}
+                  className="bg-background"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Qty Stock Awal ({initialIngredient?.unit})
+                </Label>
+                <Input
+                  type="number"
+                  min="0.1"
+                  step="any"
+                  placeholder="0"
+                  value={initialForm.qty}
+                  onChange={e => setInitialForm({ ...initialForm, qty: e.target.value })}
+                  className="bg-background font-mono text-lg"
+                  autoFocus
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label className="text-xs uppercase tracking-wider text-muted-foreground">Keterangan</Label>
+                <Textarea
+                  value={initialForm.notes}
+                  onChange={e => setInitialForm({ ...initialForm, notes: e.target.value })}
+                  className="bg-background resize-none"
+                  rows={2}
+                  placeholder="Opening Shift"
+                />
+              </div>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="pt-4 border-t border-border">
             <Button variant="outline" onClick={() => setIsInitialOpen(false)} className="border-border">Batal</Button>
             <Button
               onClick={handleSaveInitial}
@@ -336,48 +338,50 @@ export default function StockOpnamePage() {
 
       {/* ── MODAL: Tambah Barang Masuk (IN) ── */}
       <Dialog open={isInOpen} onOpenChange={setIsInOpen}>
-        <DialogContent className="bg-card border-border sm:max-w-[420px]">
+        <DialogContent className="bg-card border-border sm:max-w-[420px] flex flex-col max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-xl uppercase tracking-wider text-primary">Tambah Barang Masuk</DialogTitle>
             <p className="text-sm text-muted-foreground font-medium">{inIngredient?.ingredientName}</p>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Tanggal</Label>
-              <Input
-                type="date"
-                value={inForm.date}
-                onChange={e => setInForm({ ...inForm, date: e.target.value })}
-                className="bg-background"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">
-                Qty Masuk ({inIngredient?.unit})
-              </Label>
-              <Input
-                type="number"
-                min="0.1"
-                step="any"
-                placeholder="0"
-                value={inForm.qty}
-                onChange={e => setInForm({ ...inForm, qty: e.target.value })}
-                className="bg-background font-mono text-lg"
-                autoFocus
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Keterangan</Label>
-              <Textarea
-                value={inForm.notes}
-                onChange={e => setInForm({ ...inForm, notes: e.target.value })}
-                className="bg-background resize-none"
-                rows={2}
-                placeholder="Ambil dari Gudang"
-              />
+          <div className="overflow-y-auto overscroll-contain flex-1">
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label className="text-xs uppercase tracking-wider text-muted-foreground">Tanggal</Label>
+                <Input
+                  type="date"
+                  value={inForm.date}
+                  onChange={e => setInForm({ ...inForm, date: e.target.value })}
+                  className="bg-background"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Qty Masuk ({inIngredient?.unit})
+                </Label>
+                <Input
+                  type="number"
+                  min="0.1"
+                  step="any"
+                  placeholder="0"
+                  value={inForm.qty}
+                  onChange={e => setInForm({ ...inForm, qty: e.target.value })}
+                  className="bg-background font-mono text-lg"
+                  autoFocus
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label className="text-xs uppercase tracking-wider text-muted-foreground">Keterangan</Label>
+                <Textarea
+                  value={inForm.notes}
+                  onChange={e => setInForm({ ...inForm, notes: e.target.value })}
+                  className="bg-background resize-none"
+                  rows={2}
+                  placeholder="Ambil dari Gudang"
+                />
+              </div>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="pt-4 border-t border-border">
             <Button variant="outline" onClick={() => setIsInOpen(false)} className="border-border">Batal</Button>
             <Button
               onClick={handleSaveIn}

@@ -265,71 +265,73 @@ export default function WastingPage() {
 
       {/* Form Modal */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="bg-card border-border sm:max-w-[425px]">
+        <DialogContent className="bg-card border-border sm:max-w-[425px] flex flex-col max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-xl uppercase tracking-wider text-primary">
               {editingItem ? 'Edit Wasting' : 'Record Wasting'}
             </DialogTitle>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Date</Label>
-              <Input 
-                type="date"
-                value={formData.wastingDate} 
-                onChange={e => setFormData({...formData, wastingDate: e.target.value})} 
-                className="bg-background"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Ingredient</Label>
-              <SearchableSelect
-                options={(ingredients ?? []).map(i => ({
-                  value: i.id.toString(),
-                  label: i.name,
-                  sublabel: `${i.currentStock} ${i.unit} tersedia`,
-                }))}
-                value={formData.ingredientId}
-                onValueChange={val => setFormData({...formData, ingredientId: val})}
-                placeholder="Pilih bahan..."
-                searchPlaceholder="Cari bahan..."
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
+          <div className="overflow-y-auto overscroll-contain flex-1">
+            <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label className="text-xs uppercase tracking-wider text-muted-foreground">Quantity</Label>
+                <Label className="text-xs uppercase tracking-wider text-muted-foreground">Date</Label>
                 <Input 
-                  type="number"
-                  min="0.1"
-                  step="any"
-                  value={formData.qty} 
-                  onChange={e => setFormData({...formData, qty: Number(e.target.value)})} 
-                  className="bg-background font-mono"
+                  type="date"
+                  value={formData.wastingDate} 
+                  onChange={e => setFormData({...formData, wastingDate: e.target.value})} 
+                  className="bg-background"
                 />
               </div>
               <div className="grid gap-2">
-                <Label className="text-xs uppercase tracking-wider text-muted-foreground">Reason</Label>
+                <Label className="text-xs uppercase tracking-wider text-muted-foreground">Ingredient</Label>
                 <SearchableSelect
-                  options={WASTING_REASONS.map(r => ({ value: r, label: r }))}
-                  value={formData.reason}
-                  onValueChange={val => setFormData({...formData, reason: val})}
-                  placeholder="Pilih alasan..."
-                  searchPlaceholder="Cari alasan..."
+                  options={(ingredients ?? []).map(i => ({
+                    value: i.id.toString(),
+                    label: i.name,
+                    sublabel: `${i.currentStock} ${i.unit} tersedia`,
+                  }))}
+                  value={formData.ingredientId}
+                  onValueChange={val => setFormData({...formData, ingredientId: val})}
+                  placeholder="Pilih bahan..."
+                  searchPlaceholder="Cari bahan..."
                 />
               </div>
-            </div>
-            <div className="grid gap-2">
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Notes (Optional)</Label>
-              <Textarea 
-                value={formData.notes} 
-                onChange={e => setFormData({...formData, notes: e.target.value})} 
-                className="bg-background resize-none"
-                rows={3}
-                placeholder="Additional details..."
-              />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label className="text-xs uppercase tracking-wider text-muted-foreground">Quantity</Label>
+                  <Input 
+                    type="number"
+                    min="0.1"
+                    step="any"
+                    value={formData.qty} 
+                    onChange={e => setFormData({...formData, qty: Number(e.target.value)})} 
+                    className="bg-background font-mono"
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label className="text-xs uppercase tracking-wider text-muted-foreground">Reason</Label>
+                  <SearchableSelect
+                    options={WASTING_REASONS.map(r => ({ value: r, label: r }))}
+                    value={formData.reason}
+                    onValueChange={val => setFormData({...formData, reason: val})}
+                    placeholder="Pilih alasan..."
+                    searchPlaceholder="Cari alasan..."
+                  />
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label className="text-xs uppercase tracking-wider text-muted-foreground">Notes (Optional)</Label>
+                <Textarea 
+                  value={formData.notes} 
+                  onChange={e => setFormData({...formData, notes: e.target.value})} 
+                  className="bg-background resize-none"
+                  rows={3}
+                  placeholder="Additional details..."
+                />
+              </div>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="pt-4 border-t border-border">
             <Button variant="outline" onClick={() => setIsFormOpen(false)} className="border-border">Cancel</Button>
             <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending} className="bg-primary text-primary-foreground font-semibold">
               {(createMutation.isPending || updateMutation.isPending) ? "Saving..." : "Save Record"}

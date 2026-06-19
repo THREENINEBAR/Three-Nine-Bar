@@ -214,48 +214,50 @@ export default function SalesPage() {
 
       {/* Form Modal */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="bg-card border-border sm:max-w-[425px]">
+        <DialogContent className="bg-card border-border sm:max-w-[425px] flex flex-col max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-xl uppercase tracking-wider text-primary">
               Record Sale
             </DialogTitle>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Date</Label>
-              <Input 
-                type="date"
-                value={formData.saleDate} 
-                onChange={e => setFormData({...formData, saleDate: e.target.value})} 
-                className="bg-background"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Product</Label>
-              <SearchableSelect
-                options={activeProducts.map(p => ({
-                  value: p.id.toString(),
-                  label: p.name,
-                  sublabel: formatCurrency(p.price),
-                }))}
-                value={formData.productId}
-                onValueChange={val => setFormData({...formData, productId: val})}
-                placeholder="Pilih product..."
-                searchPlaceholder="Cari product..."
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Quantity</Label>
-              <Input 
-                type="number"
-                min="1"
-                value={formData.qty} 
-                onChange={e => setFormData({...formData, qty: Number(e.target.value)})} 
-                className="bg-background font-mono"
-              />
+          <div className="overflow-y-auto overscroll-contain flex-1">
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label className="text-xs uppercase tracking-wider text-muted-foreground">Date</Label>
+                <Input 
+                  type="date"
+                  value={formData.saleDate} 
+                  onChange={e => setFormData({...formData, saleDate: e.target.value})} 
+                  className="bg-background"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label className="text-xs uppercase tracking-wider text-muted-foreground">Product</Label>
+                <SearchableSelect
+                  options={activeProducts.map(p => ({
+                    value: p.id.toString(),
+                    label: p.name,
+                    sublabel: formatCurrency(p.price),
+                  }))}
+                  value={formData.productId}
+                  onValueChange={val => setFormData({...formData, productId: val})}
+                  placeholder="Pilih product..."
+                  searchPlaceholder="Cari product..."
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label className="text-xs uppercase tracking-wider text-muted-foreground">Quantity</Label>
+                <Input 
+                  type="number"
+                  min="1"
+                  value={formData.qty} 
+                  onChange={e => setFormData({...formData, qty: Number(e.target.value)})} 
+                  className="bg-background font-mono"
+                />
+              </div>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="pt-4 border-t border-border">
             <Button variant="outline" onClick={() => setIsFormOpen(false)} className="border-border">Cancel</Button>
             <Button onClick={handleSave} disabled={createMutation.isPending} className="bg-primary text-primary-foreground font-semibold">
               {createMutation.isPending ? "Processing..." : "Submit Sale"}

@@ -236,13 +236,14 @@ export default function UsersPage() {
 
       {/* Form Modal */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="bg-card border-border sm:max-w-[425px]">
+        <DialogContent className="bg-card border-border sm:max-w-[425px] flex flex-col max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-xl uppercase tracking-wider text-primary">
               {editingItem ? 'Edit User' : 'Add User'}
             </DialogTitle>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
+          <div className="overflow-y-auto overscroll-contain flex-1">
+            <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label className="text-xs uppercase tracking-wider text-muted-foreground">Username</Label>
               <Input 
@@ -290,8 +291,9 @@ export default function UsersPage() {
                 onCheckedChange={checked => setFormData({...formData, isActive: checked})}
               />
             </div>
+            </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="pt-4 border-t border-border">
             <Button variant="outline" onClick={() => setIsFormOpen(false)} className="border-border">Cancel</Button>
             <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending} className="bg-primary text-primary-foreground font-semibold">
               {(createMutation.isPending || updateMutation.isPending) ? "Saving..." : "Save User"}

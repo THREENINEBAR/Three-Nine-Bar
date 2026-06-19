@@ -1,0 +1,297 @@
+ANALISIS PROJECT YANG SUDAH ADA TERLEBIH DAHULU.
+
+JANGAN membuat project baru.
+JANGAN mengubah desain yang sudah ada.
+JANGAN mengubah struktur database yang sudah berjalan.
+JANGAN menghapus fitur Dashboard, Product, Resep, Sale, Wasting, maupun Stock Opname.
+
+Fokus hanya memperbaiki bug dan meningkatkan User Experience.
+
+====================================================
+1. PERBAIKI DATA BAHAN
+====================================================
+
+Saat ini tombol Hapus Data Bahan masih bermasalah.
+
+Pastikan:
+
+- Tambah Bahan berfungsi.
+- Edit Bahan berfungsi.
+- Hapus Bahan berfungsi.
+- Setelah dihapus tabel otomatis refresh.
+- Tidak ada error Foreign Key.
+- Jika bahan masih digunakan di Resep, tampilkan konfirmasi terlebih dahulu.
+
+====================================================
+2. PERBAIKI MODUL STOCK OPNAME
+====================================================
+
+Konsep stock tetap:
+
+Stock Akhir = Stock Awal + IN - OUT - Wasting
+
+Namun OUT tetap otomatis berasal dari Product Sale dan Resep.
+
+Tambahkan fitur pada setiap bahan:
+
+➕ Tambah Stock
+
+Saat tombol ditekan:
+
+Muncul modal:
+
+Tambah Stock
+
+Field:
+
+- Tanggal
+- Qty Masuk
+- Keterangan
+
+Setelah disimpan:
+
+- Stock bertambah otomatis.
+- Simpan ke stock_movements dengan tipe IN.
+- Update Stock Akhir otomatis.
+- Refresh tabel tanpa reload halaman.
+
+====================================================
+3. RIWAYAT STOCK
+====================================================
+
+Saat klik salah satu bahan pada Stock Opname,
+
+Munculkan modal:
+
+Riwayat Stock
+
+Berisi:
+
+Tanggal
+Jenis
+Qty
+Keterangan
+
+Contoh:
+
+10/06/2026
+IN
+1000
+Barang Datang
+
+10/06/2026
+OUT
+250
+Product Sale
+
+10/06/2026
+WASTING
+50
+Tumpah
+
+====================================================
+4. PERBAIKI SEMUA MODAL
+====================================================
+
+Saat ini modal seperti:
+
+- Tambah Recipe
+- Edit Recipe
+- Tambah Product
+- Tambah Bahan
+- Product Sale
+- Wasting
+- Tambah Stock
+
+Tidak bisa discroll jika isinya panjang.
+
+Masalah:
+
+Mouse Wheel tidak berfungsi.
+
+Touch Swipe HP tidak berfungsi.
+
+Harus menekan TAB berkali-kali agar bisa mencapai tombol Save.
+
+PERBAIKI MENJADI:
+
+- max-height: 90vh
+- overflow-y: auto
+- Header sticky
+- Footer sticky
+- Body modal yang discroll
+- Bukan halaman utama
+
+Pastikan:
+
+✔ Mouse Wheel bisa scroll
+
+✔ Touchpad Laptop bisa scroll
+
+✔ Swipe HP bisa scroll
+
+✔ iPhone bisa scroll
+
+✔ Android bisa scroll
+
+✔ Tablet bisa scroll
+
+Saat keyboard HP muncul:
+
+Modal tetap bisa discroll sampai tombol Save.
+
+Tambahkan padding bawah agar tombol Save tidak tertutup.
+
+====================================================
+5. PERBAIKI SEMUA DROPDOWN
+====================================================
+
+Dropdown Product dan Ingredient harus menjadi Searchable.
+
+Berlaku untuk:
+
+- Data Recipe
+- Product Sale
+- Tambah Ingredient
+- Tambah Product
+- Semua Select yang memiliki banyak data.
+
+Fitur:
+
+✔ Bisa Search
+
+✔ Bisa Scroll
+
+✔ Maksimal tinggi 300px
+
+✔ overflow-y:auto
+
+✔ Mouse Wheel
+
+✔ Swipe HP
+
+✔ Keyboard Friendly
+
+Contoh:
+
+User ketik:
+
+ara
+
+langsung muncul:
+
+Arabica
+
+User ketik:
+
+esp
+
+langsung muncul:
+
+Espresso
+
+Espresso Martini
+
+Dropdown otomatis menutup setelah dipilih.
+
+====================================================
+6. PERBAIKI RESPONSIVE
+====================================================
+
+Pastikan seluruh halaman nyaman digunakan pada:
+
+- Android
+- iPhone
+- Tablet
+- iPad
+- Laptop
+- Desktop
+
+Tidak boleh ada:
+
+- Modal keluar layar
+- Dropdown keluar layar
+- Tombol Save tertutup
+- Tabel pecah
+
+Jika tabel terlalu panjang:
+
+Gunakan:
+
+Horizontal Scroll
+
+Vertical Scroll
+
+Sticky Header
+
+====================================================
+7. STOCK OPNAME
+====================================================
+
+Tambahkan filter:
+
+- Hari
+- Bulan
+- Tahun
+
+Tampilkan:
+
+Nama Bahan
+
+Stock Awal
+
+IN
+
+OUT
+
+Wasting
+
+Stock Akhir
+
+Perhitungan tetap otomatis.
+
+====================================================
+8. DASHBOARD
+====================================================
+
+Tambahkan:
+
+- Total Stock Masuk Hari Ini
+
+- Total Stock Keluar Hari Ini
+
+- Total Wasting Hari Ini
+
+====================================================
+9. TESTING
+====================================================
+
+Setelah selesai:
+
+Periksa seluruh halaman.
+
+Pastikan:
+
+- Tidak ada Console Error.
+
+- Tidak ada API Error.
+
+- Tidak ada Infinite Render.
+
+- Tidak ada Infinite Refresh.
+
+- Tidak ada Bug Scroll.
+
+- Tidak ada Modal yang macet.
+
+- Tidak ada Dropdown yang tidak bisa discroll.
+
+- Tidak ada Tombol Save yang tertutup.
+
+- Semua CRUD tetap berjalan.
+
+- Semua perhitungan stock tetap akurat.
+
+Jangan mengubah desain premium hitam-gold yang sudah ada.
+
+Lakukan hanya perbaikan bug dan peningkatan User Experience tanpa merusak fitur yang sudah berfungsi.

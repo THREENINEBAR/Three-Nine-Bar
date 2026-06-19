@@ -222,43 +222,45 @@ export default function ProductsPage() {
 
       {/* Form Modal */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="bg-card border-border sm:max-w-[425px]">
+        <DialogContent className="bg-card border-border sm:max-w-[425px] flex flex-col max-h-[90vh]">
           <DialogHeader>
             <DialogTitle className="text-xl uppercase tracking-wider text-primary">
               {editingItem ? 'Edit Product' : 'Tambah Product'}
             </DialogTitle>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="name" className="text-xs uppercase tracking-wider text-muted-foreground">Nama Product</Label>
-              <Input 
-                id="name" 
-                value={formData.name} 
-                onChange={e => setFormData({...formData, name: e.target.value})} 
-                className="bg-background"
-                placeholder="e.g. Negroni"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="price" className="text-xs uppercase tracking-wider text-muted-foreground">Harga (Rp)</Label>
-              <Input 
-                id="price" 
-                type="number"
-                value={formData.price} 
-                onChange={e => setFormData({...formData, price: Number(e.target.value)})} 
-                className="bg-background font-mono"
-              />
-            </div>
-            <div className="flex items-center justify-between mt-2">
-              <Label htmlFor="isActive" className="text-xs uppercase tracking-wider text-muted-foreground">Status Aktif</Label>
-              <Switch 
-                id="isActive" 
-                checked={formData.isActive}
-                onCheckedChange={checked => setFormData({...formData, isActive: checked})}
-              />
+          <div className="overflow-y-auto overscroll-contain flex-1">
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="name" className="text-xs uppercase tracking-wider text-muted-foreground">Nama Product</Label>
+                <Input 
+                  id="name" 
+                  value={formData.name} 
+                  onChange={e => setFormData({...formData, name: e.target.value})} 
+                  className="bg-background"
+                  placeholder="e.g. Negroni"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="price" className="text-xs uppercase tracking-wider text-muted-foreground">Harga (Rp)</Label>
+                <Input 
+                  id="price" 
+                  type="number"
+                  value={formData.price} 
+                  onChange={e => setFormData({...formData, price: Number(e.target.value)})} 
+                  className="bg-background font-mono"
+                />
+              </div>
+              <div className="flex items-center justify-between mt-2">
+                <Label htmlFor="isActive" className="text-xs uppercase tracking-wider text-muted-foreground">Status Aktif</Label>
+                <Switch 
+                  id="isActive" 
+                  checked={formData.isActive}
+                  onCheckedChange={checked => setFormData({...formData, isActive: checked})}
+                />
+              </div>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="pt-4 border-t border-border">
             <Button variant="outline" onClick={() => setIsFormOpen(false)} className="border-border">Cancel</Button>
             <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending} className="bg-primary text-primary-foreground font-semibold">
               {(createMutation.isPending || updateMutation.isPending) ? "Saving..." : "Save"}

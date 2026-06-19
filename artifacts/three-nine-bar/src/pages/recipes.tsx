@@ -37,7 +37,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import { SearchableSelect } from "@/components/ui/searchable-select";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function RecipesPage() {
   const { user } = useAuth();
@@ -280,7 +279,7 @@ export default function RecipesPage() {
             </DialogTitle>
           </DialogHeader>
           
-          <ScrollArea className="flex-1 pr-4 -mr-4">
+          <div className="overflow-y-auto overscroll-contain flex-1">
             <div className="grid gap-6 py-4">
               <div className="grid gap-2">
                 <Label className="text-xs uppercase tracking-wider text-muted-foreground">Product</Label>
@@ -347,7 +346,7 @@ export default function RecipesPage() {
                 )}
               </div>
             </div>
-          </ScrollArea>
+          </div>
           
           <DialogFooter className="mt-4 pt-4 border-t border-border">
             <Button variant="outline" onClick={() => setIsFormOpen(false)} className="border-border">Cancel</Button>
