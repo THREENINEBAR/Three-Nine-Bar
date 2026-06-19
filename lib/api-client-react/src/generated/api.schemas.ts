@@ -82,10 +82,7 @@ export interface Ingredient {
   name: string;
   category: string;
   unit: string;
-  stockInitial: number;
-  stockMinimum: number;
   currentStock: number;
-  isLowStock?: boolean;
   createdAt?: string;
 }
 
@@ -93,8 +90,6 @@ export interface IngredientInput {
   name: string;
   category: string;
   unit: string;
-  stockInitial: number;
-  stockMinimum: number;
 }
 
 export interface Product {
@@ -184,8 +179,6 @@ export interface StockOpname {
   stockOut: number;
   stockWasting: number;
   stockFinal: number;
-  stockMinimum: number;
-  isLowStock: boolean;
   currentStock: number;
 }
 
@@ -238,7 +231,6 @@ export interface DashboardSummary {
   totalProducts: number;
   totalSalesToday: number;
   totalWastingToday: number;
-  totalLowStock: number;
   stockInToday: number;
   stockOutToday: number;
   wastingQtyToday: number;

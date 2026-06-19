@@ -47,8 +47,6 @@ router.get("/stock/opname", async (req, res) => {
       stockOut,
       stockWasting,
       stockFinal,
-      stockMinimum: ing.stockMinimum,
-      isLowStock: ing.currentStock <= ing.stockMinimum,
       currentStock: ing.currentStock,
     };
   });

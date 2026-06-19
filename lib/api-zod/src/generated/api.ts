@@ -130,10 +130,7 @@ export const ListIngredientsResponseItem = zod.object({
   "name": zod.string(),
   "category": zod.string(),
   "unit": zod.string(),
-  "stockInitial": zod.number(),
-  "stockMinimum": zod.number(),
   "currentStock": zod.number(),
-  "isLowStock": zod.boolean().optional(),
   "createdAt": zod.string().optional()
 })
 export const ListIngredientsResponse = zod.array(ListIngredientsResponseItem)
@@ -145,9 +142,7 @@ export const ListIngredientsResponse = zod.array(ListIngredientsResponseItem)
 export const CreateIngredientBody = zod.object({
   "name": zod.string(),
   "category": zod.string(),
-  "unit": zod.string(),
-  "stockInitial": zod.number(),
-  "stockMinimum": zod.number()
+  "unit": zod.string()
 })
 
 
@@ -161,9 +156,7 @@ export const UpdateIngredientParams = zod.object({
 export const UpdateIngredientBody = zod.object({
   "name": zod.string(),
   "category": zod.string(),
-  "unit": zod.string(),
-  "stockInitial": zod.number(),
-  "stockMinimum": zod.number()
+  "unit": zod.string()
 })
 
 export const UpdateIngredientResponse = zod.object({
@@ -171,10 +164,7 @@ export const UpdateIngredientResponse = zod.object({
   "name": zod.string(),
   "category": zod.string(),
   "unit": zod.string(),
-  "stockInitial": zod.number(),
-  "stockMinimum": zod.number(),
   "currentStock": zod.number(),
-  "isLowStock": zod.boolean().optional(),
   "createdAt": zod.string().optional()
 })
 
@@ -481,8 +471,6 @@ export const GetStockOpnameResponseItem = zod.object({
   "stockOut": zod.number(),
   "stockWasting": zod.number(),
   "stockFinal": zod.number(),
-  "stockMinimum": zod.number(),
-  "isLowStock": zod.boolean(),
   "currentStock": zod.number()
 })
 export const GetStockOpnameResponse = zod.array(GetStockOpnameResponseItem)
@@ -530,7 +518,6 @@ export const GetDashboardResponse = zod.object({
   "totalProducts": zod.number(),
   "totalSalesToday": zod.number(),
   "totalWastingToday": zod.number(),
-  "totalLowStock": zod.number(),
   "stockInToday": zod.number(),
   "stockOutToday": zod.number(),
   "wastingQtyToday": zod.number(),
@@ -605,8 +592,6 @@ export const GetLowStockResponseItem = zod.object({
   "stockOut": zod.number(),
   "stockWasting": zod.number(),
   "stockFinal": zod.number(),
-  "stockMinimum": zod.number(),
-  "isLowStock": zod.boolean(),
   "currentStock": zod.number()
 })
 export const GetLowStockResponse = zod.array(GetLowStockResponseItem)

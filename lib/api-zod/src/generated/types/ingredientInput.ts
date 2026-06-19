@@ -10,6 +10,4 @@ export interface IngredientInput {
   name: string;
   category: string;
   unit: string;
-  stockInitial: number;
-  stockMinimum: number;
 }

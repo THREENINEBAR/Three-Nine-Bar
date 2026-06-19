@@ -11,9 +11,6 @@ export interface Ingredient {
   name: string;
   category: string;
   unit: string;
-  stockInitial: number;
-  stockMinimum: number;
   currentStock: number;
-  isLowStock?: boolean;
   createdAt?: string;
 }

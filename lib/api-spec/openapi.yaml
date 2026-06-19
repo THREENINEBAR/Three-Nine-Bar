@@ -760,7 +760,7 @@ components:
 
     Ingredient:
       type: object
-      required: [id, name, category, unit, stockInitial, stockMinimum, currentStock]
+      required: [id, name, category, unit, currentStock]
       properties:
         id:
           type: integer
@@ -770,20 +770,14 @@ components:
           type: string
         unit:
           type: string
-        stockInitial:
-          type: number
-        stockMinimum:
-          type: number
         currentStock:
           type: number
-        isLowStock:
-          type: boolean
         createdAt:
           type: string
 
     IngredientInput:
       type: object
-      required: [name, category, unit, stockInitial, stockMinimum]
+      required: [name, category, unit]
       properties:
         name:
           type: string
@@ -791,10 +785,6 @@ components:
           type: string
         unit:
           type: string
-        stockInitial:
-          type: number
-        stockMinimum:
-          type: number
 
     Product:
       type: object
@@ -944,7 +934,7 @@ components:
 
     StockOpname:
       type: object
-      required: [ingredientId, ingredientName, unit, category, stockInitial, stockIn, stockOut, stockWasting, stockFinal, stockMinimum, isLowStock, currentStock]
+      required: [ingredientId, ingredientName, unit, category, stockInitial, stockIn, stockOut, stockWasting, stockFinal, currentStock]
       properties:
         ingredientId:
           type: integer
@@ -964,10 +954,6 @@ components:
           type: number
         stockFinal:
           type: number
-        stockMinimum:
-          type: number
-        isLowStock:
-          type: boolean
         currentStock:
           type: number
 
@@ -1010,7 +996,7 @@ components:
 
     DashboardSummary:
       type: object
-      required: [totalIngredients, totalProducts, totalSalesToday, totalWastingToday, totalLowStock, stockInToday, stockOutToday, wastingQtyToday, recentSales, salesChart, ingredientUsageChart]
+      required: [totalIngredients, totalProducts, totalSalesToday, totalWastingToday, stockInToday, stockOutToday, wastingQtyToday, recentSales, salesChart, ingredientUsageChart]
       properties:
         totalIngredients:
           type: integer
@@ -1020,8 +1006,6 @@ components:
           type: number
         totalWastingToday:
           type: number
-        totalLowStock:
-          type: integer
         stockInToday:
           type: number
         stockOutToday:

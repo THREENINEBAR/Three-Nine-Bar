@@ -7,16 +7,15 @@ import {
   useListRecipes,
   getListIngredientsQueryKey
 } from "@workspace/api-client-react";
-import { Ingredient } from "@workspace/api-client-react/src/generated/api.schemas";
+import { Ingredient } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { 
-  Plus, Search, Edit, Trash, AlertCircle, AlertTriangle
+  Plus, Search, Edit, Trash, AlertTriangle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
@@ -62,8 +61,6 @@ export default function IngredientsPage() {
     name: "",
     category: "Spirit",
     unit: "ml",
-    stockInitial: 0,
-    stockMinimum: 0,
   });
 
   const filteredData = useMemo(() => {
@@ -88,8 +85,6 @@ export default function IngredientsPage() {
         name: item.name,
         category: item.category,
         unit: item.unit,
-        stockInitial: item.stockInitial,
-        stockMinimum: item.stockMinimum,
       });
     } else {
       setEditingItem(null);
@@ -97,8 +92,6 @@ export default function IngredientsPage() {
         name: "",
         category: "Spirit",
         unit: "ml",
-        stockInitial: 0,
-        stockMinimum: 1000,
       });
     }
     setIsFormOpen(true);
@@ -110,11 +103,7 @@ export default function IngredientsPage() {
       return;
     }
 
-    const payload = {
-      ...formData,
-      stockInitial: Number(formData.stockInitial),
-      stockMinimum: Number(formData.stockMinimum)
-    };
+    const payload = { ...formData };
 
     if (editingItem) {
       updateMutation.mutate({ id: editingItem.id, data: payload }, {
@@ -202,8 +191,6 @@ export default function IngredientsPage() {
                 <th className="px-6 py-4 font-medium">Nama Bahan</th>
                 <th className="px-6 py-4 font-medium">Kategori</th>
                 <th className="px-6 py-4 font-medium text-right">Stock Saat Ini</th>
-                <th className="px-6 py-4 font-medium text-right">Min Stock</th>
-                <th className="px-6 py-4 font-medium text-center">Status</th>
                 <th className="px-6 py-4 font-medium text-right">Aksi</th>
               </tr>
             </thead>
@@ -214,14 +201,12 @@ export default function IngredientsPage() {
                     <td className="px-6 py-4"><Skeleton className="h-4 w-32" /></td>
                     <td className="px-6 py-4"><Skeleton className="h-4 w-20" /></td>
                     <td className="px-6 py-4"><Skeleton className="h-4 w-16 ml-auto" /></td>
-                    <td className="px-6 py-4"><Skeleton className="h-4 w-16 ml-auto" /></td>
-                    <td className="px-6 py-4"><Skeleton className="h-6 w-24 mx-auto" /></td>
                     <td className="px-6 py-4"><Skeleton className="h-8 w-16 ml-auto" /></td>
                   </tr>
                 ))
               ) : filteredData.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-muted-foreground">
+                  <td colSpan={4} className="px-6 py-12 text-center text-muted-foreground">
                     Tidak ada bahan ditemukan.
                   </td>
                 </tr>
@@ -232,20 +217,6 @@ export default function IngredientsPage() {
                     <td className="px-6 py-4 text-muted-foreground">{item.category}</td>
                     <td className="px-6 py-4 text-right font-mono">
                       {item.currentStock} <span className="text-xs text-muted-foreground">{item.unit}</span>
-                    </td>
-                    <td className="px-6 py-4 text-right font-mono text-muted-foreground">
-                      {item.stockMinimum} <span className="text-xs">{item.unit}</span>
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      {item.isLowStock ? (
-                        <Badge variant="destructive" className="uppercase tracking-wider font-bold text-[10px]">
-                          <AlertCircle className="mr-1 h-3 w-3" /> Low Stock
-                        </Badge>
-                      ) : (
-                        <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 uppercase tracking-wider font-bold text-[10px]">
-                          Normal
-                        </Badge>
-                      )}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
@@ -306,28 +277,6 @@ export default function IngredientsPage() {
                     placeholder="cth. ml"
                   />
                 </div>
-              </div>
-              {!editingItem && (
-                <div className="grid gap-2">
-                  <Label htmlFor="stockInitial" className="text-xs uppercase tracking-wider text-muted-foreground">Stock Awal</Label>
-                  <Input 
-                    id="stockInitial" 
-                    type="number"
-                    value={formData.stockInitial} 
-                    onChange={e => setFormData({...formData, stockInitial: Number(e.target.value)})} 
-                    className="bg-background font-mono"
-                  />
-                </div>
-              )}
-              <div className="grid gap-2">
-                <Label htmlFor="stockMinimum" className="text-xs uppercase tracking-wider text-muted-foreground">Min Stock</Label>
-                <Input 
-                  id="stockMinimum" 
-                  type="number"
-                  value={formData.stockMinimum} 
-                  onChange={e => setFormData({...formData, stockMinimum: Number(e.target.value)})} 
-                  className="bg-background font-mono"
-                />
               </div>
             </div>
           </div>

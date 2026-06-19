@@ -16,7 +16,7 @@ router.get("/reports/dashboard", async (_req, res) => {
   const totalProducts = products.length;
   const totalSalesToday = todaySales.reduce((s, r) => s + r.totalPrice, 0);
   const totalWastingToday = todayWasting.reduce((s, r) => s + r.qty, 0);
-  const totalLowStock = ingredients.filter(i => i.currentStock <= i.stockMinimum).length;
+  const totalLowStock = 0; // removed — no minimum stock concept
 
   // Today's movements
   const todayMovements = allMovements.filter(m => m.createdAt.toISOString().split("T")[0] === today);
@@ -112,20 +112,8 @@ router.get("/reports/ingredient-usage", async (req, res) => {
 });
 
 router.get("/reports/low-stock", async (_req, res) => {
-  const ingredients = await db.select().from(ingredientsTable);
-  const movements = await db.select().from(stockMovementsTable);
-  const lowStock = ingredients.filter(i => i.currentStock <= i.stockMinimum).map(ing => {
-    const ms = movements.filter(m => m.ingredientId === ing.id);
-    const stockIn = ms.filter(m => m.movementType === "in").reduce((s, m) => s + m.qty, 0);
-    const stockOut = ms.filter(m => m.movementType === "out").reduce((s, m) => s + m.qty, 0);
-    const stockWasting = ms.filter(m => m.movementType === "wasting").reduce((s, m) => s + m.qty, 0);
-    return {
-      ingredientId: ing.id, ingredientName: ing.name, unit: ing.unit, category: ing.category,
-      stockInitial: ing.stockInitial, stockIn, stockOut, stockWasting,
-      stockFinal: ing.currentStock, stockMinimum: ing.stockMinimum, isLowStock: true,
-    };
-  });
-  res.json(lowStock);
+  // Low stock concept removed — return empty array for backward compatibility
+  res.json([]);
 });
 
 export default router;

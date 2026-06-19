@@ -8,7 +8,6 @@ export const ingredientsTable = pgTable("ingredients", {
   category: text("category").notNull(),
   unit: text("unit").notNull(),
   stockInitial: real("stock_initial").notNull().default(0),
-  stockMinimum: real("stock_minimum").notNull().default(0),
   currentStock: real("current_stock").notNull().default(0),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });

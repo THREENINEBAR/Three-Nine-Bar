@@ -7,7 +7,7 @@ import {
   useListIngredients,
   getListWastingQueryKey
 } from "@workspace/api-client-react";
-import { Wasting } from "@workspace/api-client-react/src/generated/api.schemas";
+import { Wasting } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
 import { formatShortDate } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";

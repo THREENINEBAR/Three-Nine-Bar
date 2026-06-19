@@ -10,10 +10,7 @@ function formatIngredient(i: typeof ingredientsTable.$inferSelect) {
     name: i.name,
     category: i.category,
     unit: i.unit,
-    stockInitial: i.stockInitial,
-    stockMinimum: i.stockMinimum,
     currentStock: i.currentStock,
-    isLowStock: i.currentStock <= i.stockMinimum,
     createdAt: i.createdAt.toISOString(),
   };
 }
@@ -24,30 +21,26 @@ router.get("/ingredients", async (_req, res) => {
 });
 
 router.post("/ingredients", async (req, res) => {
-  const { name, category, unit, stockInitial, stockMinimum } = req.body;
+  const { name, category, unit } = req.body;
   if (!name || !category || !unit) {
     res.status(400).json({ error: "name, category, and unit required" });
     return;
   }
-  const initial = Number(stockInitial) || 0;
   const result = await db.insert(ingredientsTable).values({
     name, category, unit,
-    stockInitial: initial,
-    stockMinimum: Number(stockMinimum) || 0,
-    currentStock: initial,
+    stockInitial: 0,
+    currentStock: 0,
   }).returning();
   res.status(201).json(formatIngredient(result[0]));
 });
 
 router.put("/ingredients/:id", async (req, res) => {
   const id = parseInt(req.params.id);
-  const { name, category, unit, stockInitial, stockMinimum } = req.body;
+  const { name, category, unit } = req.body;
   const updates: Record<string, unknown> = {};
   if (name !== undefined) updates.name = name;
   if (category !== undefined) updates.category = category;
   if (unit !== undefined) updates.unit = unit;
-  if (stockInitial !== undefined) updates.stockInitial = Number(stockInitial);
-  if (stockMinimum !== undefined) updates.stockMinimum = Number(stockMinimum);
   const result = await db.update(ingredientsTable).set(updates).where(eq(ingredientsTable.id, id)).returning();
   if (!result[0]) { res.status(404).json({ error: "Ingredient not found" }); return; }
   res.json(formatIngredient(result[0]));

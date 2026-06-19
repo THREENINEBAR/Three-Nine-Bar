@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode, useState, useEffect } from "react";
-import { User } from "@workspace/api-client-react/src/generated/api.schemas";
+import { User } from "@workspace/api-client-react";
 import { useGetCurrentUser } from "@workspace/api-client-react";
 
 interface AuthContextType {

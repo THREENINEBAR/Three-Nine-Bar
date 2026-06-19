@@ -6,7 +6,7 @@ import {
   useDeleteUser,
   getListUsersQueryKey
 } from "@workspace/api-client-react";
-import { User, UserRole } from "@workspace/api-client-react/src/generated/api.schemas";
+import { User, UserRole } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";

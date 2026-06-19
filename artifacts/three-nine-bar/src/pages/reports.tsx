@@ -3,7 +3,6 @@ import {
   useGetSalesByProduct,
   useGetIngredientUsage,
   useListWasting,
-  useGetLowStock
 } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
 import { formatCurrency, formatShortDate } from "@/lib/format";
@@ -28,7 +27,6 @@ export default function ReportsPage() {
   const { data: salesData, isLoading: loadingSales } = useGetSalesByProduct({ startDate, endDate });
   const { data: usageData, isLoading: loadingUsage } = useGetIngredientUsage({ startDate, endDate });
   const { data: wastingData, isLoading: loadingWasting } = useListWasting({ startDate, endDate });
-  const { data: lowStockData, isLoading: loadingLowStock } = useGetLowStock();
 
   if (!isAdmin) {
     return <div className="p-8 text-destructive">Unauthorized access</div>;
@@ -88,11 +86,10 @@ export default function ReportsPage() {
         </div>
 
         <Tabs defaultValue="sales" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-sidebar print:hidden">
+          <TabsList className="grid w-full grid-cols-3 bg-sidebar print:hidden">
             <TabsTrigger value="sales" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground uppercase text-xs tracking-wider">Sales</TabsTrigger>
             <TabsTrigger value="usage" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground uppercase text-xs tracking-wider">Ingredient Usage</TabsTrigger>
             <TabsTrigger value="wasting" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground uppercase text-xs tracking-wider">Wasting</TabsTrigger>
-            <TabsTrigger value="lowstock" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground uppercase text-xs tracking-wider">Low Stock</TabsTrigger>
           </TabsList>
 
           <TabsContent value="sales" className="mt-6 print:block">
@@ -203,40 +200,6 @@ export default function ReportsPage() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="lowstock" className="mt-6 print:hidden">
-            <Card className="border-border bg-transparent shadow-none">
-              <CardHeader className="px-0 pt-0">
-                <CardTitle className="text-xl text-destructive uppercase tracking-wider flex items-center gap-2">
-                  <FileText className="h-5 w-5" /> Low Stock Alert
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="px-0">
-                <table className="w-full text-sm text-left">
-                  <thead className="text-xs uppercase border-b-2 border-border/50 text-muted-foreground">
-                    <tr>
-                      <th className="py-3 font-medium">Ingredient Name</th>
-                      <th className="py-3 font-medium">Category</th>
-                      <th className="py-3 font-medium text-right">Min Stock</th>
-                      <th className="py-3 font-medium text-right text-destructive">Current Stock</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {!loadingLowStock && lowStockData?.map((item) => (
-                      <tr key={item.ingredientId} className="border-b border-border/20 bg-destructive/5">
-                        <td className="py-3 font-medium text-destructive">{item.ingredientName}</td>
-                        <td className="py-3 text-muted-foreground">{item.category}</td>
-                        <td className="py-3 text-right font-mono">{item.stockMinimum} <span className="text-xs text-muted-foreground">{item.unit}</span></td>
-                        <td className="py-3 text-right font-mono font-bold text-destructive">{item.currentStock} <span className="text-xs font-normal text-muted-foreground">{item.unit}</span></td>
-                      </tr>
-                    ))}
-                    {!loadingLowStock && lowStockData?.length === 0 && (
-                      <tr><td colSpan={4} className="py-6 text-center text-muted-foreground">No low stock items currently</td></tr>
-                    )}
-                  </tbody>
-                </table>
-              </CardContent>
-            </Card>
-          </TabsContent>
         </Tabs>
       </div>
 

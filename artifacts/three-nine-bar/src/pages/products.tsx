@@ -6,7 +6,7 @@ import {
   useDeleteProduct,
   getListProductsQueryKey
 } from "@workspace/api-client-react";
-import { Product } from "@workspace/api-client-react/src/generated/api.schemas";
+import { Product } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
 import { formatCurrency } from "@/lib/format";
 import { useToast } from "@/hooks/use-toast";

@@ -14,7 +14,6 @@ export interface DashboardSummary {
   totalProducts: number;
   totalSalesToday: number;
   totalWastingToday: number;
-  totalLowStock: number;
   stockInToday: number;
   stockOutToday: number;
   wastingQtyToday: number;
