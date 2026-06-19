@@ -36,7 +36,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function RecipesPage() {
@@ -284,16 +284,14 @@ export default function RecipesPage() {
             <div className="grid gap-6 py-4">
               <div className="grid gap-2">
                 <Label className="text-xs uppercase tracking-wider text-muted-foreground">Product</Label>
-                <Select value={productId} onValueChange={setProductId} disabled={!!editingItem}>
-                  <SelectTrigger className="bg-background">
-                    <SelectValue placeholder="Select a product" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableProducts.map(p => (
-                      <SelectItem key={p.id} value={p.id.toString()}>{p.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <SearchableSelect
+                  options={availableProducts.map(p => ({ value: p.id.toString(), label: p.name }))}
+                  value={productId}
+                  onValueChange={setProductId}
+                  placeholder="Pilih product..."
+                  searchPlaceholder="Cari product..."
+                  disabled={!!editingItem}
+                />
               </div>
 
               <div className="space-y-4">
@@ -308,19 +306,18 @@ export default function RecipesPage() {
                   <div key={index} className="flex items-end gap-3 bg-sidebar/30 p-3 rounded-md border border-border/50">
                     <div className="grid gap-2 flex-1">
                       <Label className="text-[10px] uppercase text-muted-foreground">Ingredient</Label>
-                      <Select 
-                        value={detail.ingredientId.toString()} 
+                      <SearchableSelect
+                        options={(ingredients ?? []).map(i => ({
+                          value: i.id.toString(),
+                          label: i.name,
+                          sublabel: i.unit,
+                        }))}
+                        value={detail.ingredientId > 0 ? detail.ingredientId.toString() : ""}
                         onValueChange={(val) => updateIngredientRow(index, 'ingredientId', Number(val))}
-                      >
-                        <SelectTrigger className="bg-background h-9">
-                          <SelectValue placeholder="Select ingredient" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {ingredients?.map(i => (
-                            <SelectItem key={i.id} value={i.id.toString()}>{i.name} ({i.unit})</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        placeholder="Cari bahan..."
+                        searchPlaceholder="Cari bahan..."
+                        className="h-9"
+                      />
                     </div>
                     <div className="grid gap-2 w-24">
                       <Label className="text-[10px] uppercase text-muted-foreground">Qty</Label>

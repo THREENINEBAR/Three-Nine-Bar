@@ -34,7 +34,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { format } from "date-fns";
 
 export default function SalesPage() {
@@ -232,16 +232,17 @@ export default function SalesPage() {
             </div>
             <div className="grid gap-2">
               <Label className="text-xs uppercase tracking-wider text-muted-foreground">Product</Label>
-              <Select value={formData.productId} onValueChange={val => setFormData({...formData, productId: val})}>
-                <SelectTrigger className="bg-background">
-                  <SelectValue placeholder="Select product" />
-                </SelectTrigger>
-                <SelectContent>
-                  {activeProducts.map(p => (
-                    <SelectItem key={p.id} value={p.id.toString()}>{p.name} - {formatCurrency(p.price)}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <SearchableSelect
+                options={activeProducts.map(p => ({
+                  value: p.id.toString(),
+                  label: p.name,
+                  sublabel: formatCurrency(p.price),
+                }))}
+                value={formData.productId}
+                onValueChange={val => setFormData({...formData, productId: val})}
+                placeholder="Pilih product..."
+                searchPlaceholder="Cari product..."
+              />
             </div>
             <div className="grid gap-2">
               <Label className="text-xs uppercase tracking-wider text-muted-foreground">Quantity</Label>

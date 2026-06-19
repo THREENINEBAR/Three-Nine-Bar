@@ -37,7 +37,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import { format } from "date-fns";
 
 const WASTING_REASONS = [
@@ -283,16 +283,17 @@ export default function WastingPage() {
             </div>
             <div className="grid gap-2">
               <Label className="text-xs uppercase tracking-wider text-muted-foreground">Ingredient</Label>
-              <Select value={formData.ingredientId} onValueChange={val => setFormData({...formData, ingredientId: val})}>
-                <SelectTrigger className="bg-background">
-                  <SelectValue placeholder="Select ingredient" />
-                </SelectTrigger>
-                <SelectContent>
-                  {ingredients?.map(i => (
-                    <SelectItem key={i.id} value={i.id.toString()}>{i.name} ({i.unit})</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <SearchableSelect
+                options={(ingredients ?? []).map(i => ({
+                  value: i.id.toString(),
+                  label: i.name,
+                  sublabel: `${i.currentStock} ${i.unit} tersedia`,
+                }))}
+                value={formData.ingredientId}
+                onValueChange={val => setFormData({...formData, ingredientId: val})}
+                placeholder="Pilih bahan..."
+                searchPlaceholder="Cari bahan..."
+              />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
@@ -308,16 +309,13 @@ export default function WastingPage() {
               </div>
               <div className="grid gap-2">
                 <Label className="text-xs uppercase tracking-wider text-muted-foreground">Reason</Label>
-                <Select value={formData.reason} onValueChange={val => setFormData({...formData, reason: val})}>
-                  <SelectTrigger className="bg-background">
-                    <SelectValue placeholder="Reason" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {WASTING_REASONS.map(r => (
-                      <SelectItem key={r} value={r}>{r}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <SearchableSelect
+                  options={WASTING_REASONS.map(r => ({ value: r, label: r }))}
+                  value={formData.reason}
+                  onValueChange={val => setFormData({...formData, reason: val})}
+                  placeholder="Pilih alasan..."
+                  searchPlaceholder="Cari alasan..."
+                />
               </div>
             </div>
             <div className="grid gap-2">
